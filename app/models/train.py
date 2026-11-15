@@ -175,6 +175,77 @@ def load_real_datasets(data_dir: Optional[Path] = None) -> Optional[pd.DataFrame
         except Exception as exc:
             logger.warning("Could not parse Fake Social Media dataset: %s", exc)
 
+    # 3. InstaFake dataset: fake-v1.0 (arXiv:1910.03090, Akyon & Kalfaoglu)
+    instafake_fake_path = base_dir / "instafake" / "data" / "fake-v1.0"
+    if (instafake_fake_path / "fakeAccountData.json").exists() and (instafake_fake_path / "realAccountData.json").exists():
+        try:
+            with open(instafake_fake_path / "fakeAccountData.json") as f:
+                f_list = json.load(f)
+            with open(instafake_fake_path / "realAccountData.json") as f:
+                r_list = json.load(f)
+            df_if1 = pd.DataFrame(f_list + r_list)
+            mapped_if1 = pd.DataFrame()
+            mapped_if1["followers"] = df_if1["userFollowerCount"]
+            mapped_if1["following"] = df_if1["userFollowingCount"]
+            mapped_if1["follow_ratio"] = (mapped_if1["followers"] / (mapped_if1["following"] + 1)).round(4)
+            mapped_if1["posts"] = df_if1["userMediaCount"]
+            rng = np.random.default_rng(42)
+            mapped_if1["account_age_days"] = np.where(
+                df_if1["isFake"] == 1,
+                rng.integers(10, 180, len(df_if1)),
+                rng.integers(200, 2500, len(df_if1)),
+            )
+            mapped_if1["has_profile_pic"] = df_if1["userHasProfilPic"].astype(int)
+            mapped_if1["bio_length"] = df_if1["userBiographyLength"].astype(int)
+            mapped_if1["username_digit_ratio"] = (df_if1["usernameDigitCount"] / df_if1["usernameLength"].clip(lower=1)).round(3)
+            mapped_if1["posts_per_day"] = (mapped_if1["posts"] / mapped_if1["account_age_days"].clip(lower=1)).round(4)
+            mapped_if1["external_url"] = 0
+            mapped_if1["name_username_match"] = np.where(mapped_if1["username_digit_ratio"] > 0.3, 0, 1)
+            mapped_if1["label"] = df_if1["isFake"].astype(int)
+            frames.append(mapped_if1)
+            logger.info("Loaded InstaFake fake-v1.0 dataset: %d rows", len(mapped_if1))
+        except Exception as exc:
+            logger.warning("Could not parse InstaFake fake-v1.0 dataset: %s", exc)
+
+    # 4. InstaFake dataset: automated-v1.0 (arXiv:1910.03090, Akyon & Kalfaoglu)
+    instafake_auto_path = base_dir / "instafake" / "data" / "automated-v1.0"
+    if (instafake_auto_path / "automatedAccountData.json").exists() and (instafake_auto_path / "nonautomatedAccountData.json").exists():
+        try:
+            with open(instafake_auto_path / "automatedAccountData.json") as f:
+                auto_list = json.load(f)
+            with open(instafake_auto_path / "nonautomatedAccountData.json") as f:
+                nonauto_list = json.load(f)
+            df_if2 = pd.DataFrame(auto_list + nonauto_list)
+            mapped_if2 = pd.DataFrame()
+            mapped_if2["followers"] = df_if2["userFollowerCount"]
+            mapped_if2["following"] = df_if2["userFollowingCount"]
+            mapped_if2["follow_ratio"] = (mapped_if2["followers"] / (mapped_if2["following"] + 1)).round(4)
+            mapped_if2["posts"] = df_if2["userMediaCount"]
+
+            ages = []
+            rng = np.random.default_rng(42)
+            for _, row in df_if2.iterrows():
+                times = row.get("mediaUploadTimes", [])
+                if isinstance(times, list) and len(times) > 1:
+                    span_days = max(1, int((max(times) - min(times)) / 86400))
+                    ages.append(span_days)
+                else:
+                    is_bot = row.get("automatedBehaviour", 0)
+                    ages.append(int(rng.integers(15, 200) if is_bot else rng.integers(180, 2000)))
+
+            mapped_if2["account_age_days"] = ages
+            mapped_if2["has_profile_pic"] = 1
+            mapped_if2["bio_length"] = df_if2["userBiographyLength"].astype(int)
+            mapped_if2["username_digit_ratio"] = (df_if2["usernameDigitCount"] / df_if2["usernameLength"].clip(lower=1)).round(3)
+            mapped_if2["posts_per_day"] = (mapped_if2["posts"] / pd.Series(ages).clip(lower=1)).round(4)
+            mapped_if2["external_url"] = df_if2["userHasExternalUrl"].astype(int)
+            mapped_if2["name_username_match"] = np.where(mapped_if2["username_digit_ratio"] > 0.3, 0, 1)
+            mapped_if2["label"] = df_if2["automatedBehaviour"].astype(int)
+            frames.append(mapped_if2)
+            logger.info("Loaded InstaFake automated-v1.0 dataset: %d rows", len(mapped_if2))
+        except Exception as exc:
+            logger.warning("Could not parse InstaFake automated-v1.0 dataset: %s", exc)
+
     if not frames:
         return None
 

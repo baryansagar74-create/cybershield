@@ -46,12 +46,18 @@ def load_model(model_path: Optional[str] = None):
     if model_path:
         target_path = Path(model_path)
     else:
-        # Search for latest joblib or pkl
-        models = sorted(registry.glob("*.joblib")) + sorted(registry.glob("*.pkl"))
-        if not models:
-            logger.info("No saved model found in registry, will train on demand or use heuristic.")
-            return None
-        target_path = models[-1]
+        # Check latest symlink or find latest timestamped model
+        latest_link = registry / "latest_model.joblib"
+        if latest_link.exists():
+            target_path = latest_link.resolve() if latest_link.is_symlink() else latest_link
+        else:
+            models = sorted([p for p in registry.glob("rf_*_model.joblib") if not p.is_symlink()])
+            if not models:
+                models = sorted(registry.glob("*.joblib")) + sorted(registry.glob("*.pkl"))
+            if not models:
+                logger.info("No saved model found in registry, will train on demand or use heuristic.")
+                return None
+            target_path = models[-1]
 
     try:
         loaded = joblib.load(target_path)
