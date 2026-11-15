@@ -1,0 +1,161 @@
+body {
+  width: 320px;
+  margin: 0;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #050914;
+  color: #F8FAFC;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.logo-box {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00F2FE 0%, #6366F1 50%, #EC4899 100%);
+  padding: 1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8.5px;
+  object-fit: cover;
+  background-color: #050914;
+}
+
+.radar-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: #10B981;
+  border: 2px solid #050914;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #FFFFFF 0%, #00F2FE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 9px;
+  font-weight: 700;
+  color: #F59E0B;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 2px 0 0 0;
+}
+
+.status-box {
+  background: rgba(13, 24, 47, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.label {
+  color: #94A3B8;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.pill {
+  background: rgba(0, 242, 254, 0.12);
+  color: #00F2FE;
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #00F2FE 0%, #6366F1 50%, #4338CA 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.result-status {
+  margin-top: 10px;
+  font-size: 11px;
+  text-align: center;
+  font-weight: 600;
+  min-height: 18px;
+}
+
+.footer {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 9px;
+  text-align: center;
+  color: #64748B;
+  font-weight: 500;
+}

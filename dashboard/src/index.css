@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-primary-900 text-gray-100 font-sans antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-primary-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary-400 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent-400;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-secondary-DEFAULT rounded-xl border border-secondary-400/20 shadow-lg;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-secondary-400/20;
+  }
+
+  .card-body {
+    @apply px-6 py-4;
+  }
+
+  .btn-primary {
+    @apply bg-accent-DEFAULT hover:bg-accent-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-2 focus:ring-offset-primary-DEFAULT;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-400 hover:bg-secondary-300 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-300 focus:ring-offset-2 focus:ring-offset-primary-DEFAULT;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-primary-DEFAULT;
+  }
+
+  .input-field {
+    @apply bg-primary-700 border border-secondary-400/30 text-white placeholder-gray-400 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition-colors duration-200 w-full;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .table-header {
+    @apply bg-primary-700/50 text-gray-300 uppercase text-xs font-semibold tracking-wider;
+  }
+
+  .table-row {
+    @apply border-b border-secondary-400/10 hover:bg-primary-700/30 transition-colors duration-150;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-white mb-6;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-white;
+  }
+
+  .stat-label {
+    @apply text-sm text-gray-400 mt-1;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent-300 to-blue-400 bg-clip-text text-transparent;
+  }
+}

@@ -1,0 +1,14 @@
+              precision    recall  f1-score   support
+
+     genuine      0.822     0.905     0.862       602
+        fake      0.831     0.704     0.762       398
+
+    accuracy                          0.825      1000
+   macro avg      0.826     0.804     0.812      1000
+weighted avg      0.826     0.825     0.822      1000
+
+ROC-AUC: 0.811
+Confusion matrix: [[545, 57], [118, 280]]
+@officer_rajesh_8841 (new, no photo, follows 2400)      score=0.842  -> HIGH - report
+@priya.sharma (3 yrs, active, normal ratio)             score=0.386  -> LOW
+@itbp_recruit_2024 (impersonation style, 40 days)       score=0.907  -> HIGH - report

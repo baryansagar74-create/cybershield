@@ -1,0 +1,116 @@
+version: "3.9"
+
+services:
+  # --- PostgreSQL ---
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: profileguard
+      POSTGRES_USER: profileguard
+      # TODO(user-input): Change this password before any non-local use
+      POSTGRES_PASSWORD: profileguard_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U profileguard"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # --- Redis ---
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # --- Elasticsearch (optional, comment out if not needed) ---
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  # --- ProfileGuard API ---
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data/evidence:/data/evidence
+      - .:/app
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  # --- Celery Worker ---
+  celery-worker:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data/evidence:/data/evidence
+      - .:/app
+    command: celery -A app.worker worker --loglevel=info --concurrency=4
+
+  # --- Celery Beat (scheduled tasks) ---
+  celery-beat:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: celery -A app.worker beat --loglevel=info
+
+  # --- Dashboard (React, dev mode) ---
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./dashboard/src:/app/src
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+
+  # --- MailHog (dev email testing) ---
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  pgdata:
+  esdata:

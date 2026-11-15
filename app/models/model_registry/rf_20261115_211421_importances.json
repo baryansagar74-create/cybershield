@@ -1,0 +1,13 @@
+{
+  "followers": 0.201685,
+  "following": 0.045926,
+  "follow_ratio": 0.168246,
+  "posts": 0.119008,
+  "account_age_days": 0.046151,
+  "has_profile_pic": 0.102098,
+  "bio_length": 0.021042,
+  "username_digit_ratio": 0.24129,
+  "posts_per_day": 0.036491,
+  "external_url": 0.002733,
+  "name_username_match": 0.01533
+}

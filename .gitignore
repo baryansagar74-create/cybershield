@@ -1,0 +1,59 @@
+# Secrets - NEVER commit
+.env
+*.env.local
+*.env.production
+*service-account*.json
+
+# Evidence data
+data/evidence/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+venv/
+.venv/
+env/
+
+# ML models (large files)
+app/models/model_registry/*.pkl
+app/models/model_registry/*.joblib
+
+# Node/React
+dashboard/node_modules/
+dashboard/build/
+dashboard/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log
+
+# SQLite / DB
+*.db
+*.sqlite
+*.sqlite3
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Temp
+*.tmp
+*.bak

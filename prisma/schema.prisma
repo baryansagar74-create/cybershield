@@ -1,0 +1,118 @@
+// ProfileGuard — Prisma Database Schema
+// Fully synchronized with SQLAlchemy SQLite / PostgreSQL models
+//
+// Usage:
+//   To view database in browser GUI:
+//     npx prisma studio
+//   To generate client:
+//     npx prisma generate
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../profileguard.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model UserAnalyst {
+  id              String         @id @default(uuid())
+  email           String         @unique
+  name            String
+  hashed_password String
+  role            String         @default("analyst") // analyst, nodal_officer, admin, viewer
+  unit            String?
+  totp_secret     String?
+  twofa_enabled   Boolean        @default(false)
+  is_active       Boolean        @default(true)
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @updatedAt
+
+  assigned_cases  TakedownCase[] @relation("AnalystCases")
+  approved_cases  TakedownCase[] @relation("NodalCases")
+  audit_actions   AuditLog[]
+
+  @@map("user_analyst")
+}
+
+model PlatformAccount {
+  id          String       @id @default(uuid())
+  platform    String       // instagram, x, telegram, facebook
+  handle      String
+  profile_url String?
+  first_seen  DateTime?    @default(now())
+  raw_json    String?      // JSON payload
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+
+  assessments Assessment[]
+  evidence    Evidence[]
+
+  @@index([platform])
+  @@index([handle])
+  @@map("platform_account")
+}
+
+model Assessment {
+  id            String          @id @default(uuid())
+  account_id    String
+  score         Float           // 0.000 to 1.000
+  band          String          // HIGH, MEDIUM, LOW
+  features_json String?         // Signals & extracted features
+  model_version String?
+  created_at    DateTime        @default(now())
+
+  account       PlatformAccount @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  takedown_cases TakedownCase[]
+
+  @@map("assessment")
+}
+
+model TakedownCase {
+  id               String       @id @default(uuid())
+  assessment_id    String
+  status           String       @default("draft") // draft, submitted, platform_review, resolved, escalated
+  notice_ref       String?      // e.g. ITBP-PG-2026-XXXX
+  sla_due_at       DateTime?    // IT Rules 2026 SLA deadline
+  outcome          String?
+  analyst_id       String?
+  nodal_officer_id String?
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @updatedAt
+
+  assessment       Assessment   @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  analyst          UserAnalyst? @relation("AnalystCases", fields: [analyst_id], references: [id])
+  nodal_officer    UserAnalyst? @relation("NodalCases", fields: [nodal_officer_id], references: [id])
+
+  @@index([status])
+  @@map("takedown_case")
+}
+
+model Evidence {
+  id              String          @id @default(uuid())
+  account_id      String
+  file_path       String?
+  screenshot_hash String?
+  content_type    String?
+  captured_at     DateTime?
+  created_at      DateTime        @default(now())
+
+  account         PlatformAccount @relation(fields: [account_id], references: [id], onDelete: Cascade)
+
+  @@map("evidence")
+}
+
+model AuditLog {
+  id         String       @id @default(uuid())
+  actor_id   String?
+  action     String       // SCAN_EXECUTED, CASE_CREATED, NOTICE_GENERATED, etc.
+  details    String?      // JSON details
+  prev_hash  String?      // SHA-256 previous block hash (genesis: 64 zeros)
+  this_hash  String       // SHA-256 current block hash
+  created_at DateTime     @default(now())
+
+  actor      UserAnalyst? @relation(fields: [actor_id], references: [id])
+
+  @@map("audit_log")
+}

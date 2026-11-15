@@ -1,0 +1,11 @@
+scikit-learn
+pandas
+numpy
+fastapi
+celery
+redis
+imagehash
+opencv-python-headless
+spacy
+python-dotenv
+requests

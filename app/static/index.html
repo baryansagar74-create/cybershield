@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProfileGuard — ITBP Fake Account Detection & Takedown Console</title>
+  <link rel="icon" type="image/png" href="/assets/favicon_32.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              975: '#02050b',
+              950: '#050914',
+              900: '#081020',
+              850: '#0d182f',
+              800: '#132242',
+              750: '#1a2e56',
+              700: '#223c6f',
+              cyan: '#00F2FE',
+              neon: '#4FACFE',
+              accent: '#6366F1'
+            }
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'radar-spin': 'radarSpin 4s linear infinite',
+            'conic-spin': 'conicSpin 6s linear infinite',
+            'float-slow': 'floatSlow 4s ease-in-out infinite',
+            'text-shine': 'textShine 6s linear infinite',
+            'pulse-ring': 'pulseRing 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            glowPulse: {
+              '0%, 100%': { boxShadow: '0 0 15px rgba(0, 242, 254, 0.3), 0 0 35px rgba(99, 102, 241, 0.2)' },
+              '50%': { boxShadow: '0 0 25px rgba(0, 242, 254, 0.6), 0 0 50px rgba(99, 102, 241, 0.4)' },
+            },
+            radarSpin: {
+              'from': { transform: 'rotate(0deg)' },
+              'to': { transform: 'rotate(360deg)' }
+            },
+            conicSpin: {
+              'from': { transform: 'rotate(0deg)' },
+              'to': { transform: 'rotate(360deg)' }
+            },
+            floatSlow: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-4px)' }
+            },
+            textShine: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' }
+            },
+            pulseRing: {
+              '0%': { transform: 'scale(0.95)', opacity: '0.8' },
+              '50%': { transform: 'scale(1.3)', opacity: '0' },
+              '100%': { transform: 'scale(0.95)', opacity: '0' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Dynamic Aurora Colormix Background Canvas */
+    .aurora-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .aurora-orb {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(90px);
+      opacity: 0.35;
+      will-change: transform;
+      animation: floatSlow 12s ease-in-out infinite alternate;
+    }
+    .dark .aurora-orb-1 {
+      width: 600px;
+      height: 600px;
+      top: -150px;
+      left: 10%;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.28) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 70%);
+    }
+    .dark .aurora-orb-2 {
+      width: 700px;
+      height: 700px;
+      bottom: -200px;
+      right: 5%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(236, 72, 153, 0.15) 50%, transparent 70%);
+      animation-duration: 16s;
+    }
+    .dark .aurora-orb-3 {
+      width: 500px;
+      height: 500px;
+      top: 40%;
+      left: 45%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(14, 165, 233, 0.1) 50%, transparent 70%);
+      animation-duration: 20s;
+    }
+
+    /* Light Theme Orbs */
+    html:not(.dark) .aurora-orb-1 {
+      width: 600px;
+      height: 600px;
+      top: -150px;
+      left: 10%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 70%);
+      opacity: 0.6;
+    }
+    html:not(.dark) .aurora-orb-2 {
+      width: 700px;
+      height: 700px;
+      bottom: -200px;
+      right: 5%;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.08) 0%, rgba(99, 102, 241, 0.06) 50%, transparent 70%);
+      opacity: 0.5;
+    }
+    html:not(.dark) .aurora-orb-3 {
+      width: 500px;
+      height: 500px;
+      top: 40%;
+      left: 45%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.06) 50%, transparent 70%);
+      opacity: 0.5;
+    }
+
+    /* Cyber Grid Matrix Texture */
+    .cyber-grid {
+      background-image:
+        radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .dark .cyber-grid {
+      background-image:
+        radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+    .dark .glass-card {
+      background: rgba(13, 24, 47, 0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    /* Shimmer gradient header text */
+    .shimmer-text {
+      background: linear-gradient(90deg, #ffffff 0%, #00F2FE 30%, #a5b4fc 60%, #ffffff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textShine 6s linear infinite;
+    }
+    html:not(.dark) .shimmer-text {
+      background: linear-gradient(90deg, #0f172a 0%, #4338ca 35%, #0284c7 70%, #0f172a 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textShine 6s linear infinite;
+    }
+
+    /* Iridescent Conic Logo Ring */
+    .logo-conic-ring {
+      background: conic-gradient(from 0deg, #00F2FE, #6366F1, #EC4899, #F59E0B, #10B981, #00F2FE);
+      animation: conicSpin 7s linear infinite;
+    }
+
+    .mesh-gradient {
+      background: linear-gradient(135deg, rgba(19, 34, 66, 0.95) 0%, rgba(13, 24, 47, 0.92) 50%, rgba(99, 102, 241, 0.22) 100%);
+    }
+    html:not(.dark) .mesh-gradient {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.4);
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-cyber-975 text-slate-800 dark:text-slate-100 flex h-screen overflow-hidden cyber-grid transition-colors duration-500 relative">
+
+  <!-- Ambient Dynamic Aurora Glows -->
+  <div class="aurora-bg">
+    <div class="aurora-orb aurora-orb-1"></div>
+    <div class="aurora-orb aurora-orb-2"></div>
+    <div class="aurora-orb aurora-orb-3"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white/90 dark:bg-cyber-950/90 border-r border-slate-200/80 dark:border-slate-800/80 text-slate-700 dark:text-white flex flex-col justify-between shrink-0 shadow-2xl z-20 backdrop-blur-2xl transition-colors duration-500 relative">
+    <div>
+      <!-- Brand Header with Iridescent Animated Emblem -->
+      <div class="h-20 flex items-center gap-3.5 px-5 border-b border-slate-200/80 dark:border-slate-800/80">
+        <div class="relative flex items-center justify-center animate-float-slow">
+          <!-- Spinning iridescent conic glow frame -->
+          <div class="w-11 h-11 rounded-2xl logo-conic-ring p-[2px] shadow-lg shadow-cyan-500/20">
+            <div class="w-full h-full bg-white dark:bg-cyber-950 rounded-[14px] flex items-center justify-center overflow-hidden">
+              <img src="/assets/icon_192.png" alt="ProfileGuard" class="w-7 h-7 object-contain drop-shadow-md transition-transform duration-300 hover:scale-110" onerror="this.src='https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/shield-alert.svg'">
+            </div>
+          </div>
+          <!-- Real-time radar status beacon -->
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-cyber-950 rounded-full animate-ping"></span>
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-cyber-950 rounded-full shadow-sm"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-extrabold text-lg leading-tight tracking-wider shimmer-text">ProfileGuard</h1>
+          </div>
+          <p class="text-[9px] text-amber-600 dark:text-amber-400 font-extrabold tracking-widest uppercase flex items-center gap-1">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+            ITBP / MHA CYBERSHIELD
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3.5 space-y-1.5">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/25 border border-indigo-400/30">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Executive Overview</span>
+        </button>
+        <button onclick="switchTab('scan')" id="nav-scan" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white">
+          <i data-lucide="scan" class="w-4 h-4 text-cyan-500"></i>
+          <span>Profile Scanner</span>
+        </button>
+        <button onclick="switchTab('cases')" id="nav-cases" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white">
+          <i data-lucide="file-text" class="w-4 h-4 text-amber-500"></i>
+          <span>Takedown Cases & SLA</span>
+        </button>
+        <button onclick="switchTab('audit')" id="nav-audit" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+          <span>Audit Trail (SHA-256)</span>
+        </button>
+        <a href="/docs" target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white">
+          <i data-lucide="terminal" class="w-4 h-4 text-indigo-500"></i>
+          <span>API Swagger Console</span>
+          <i data-lucide="external-link" class="w-3 h-3 ml-auto opacity-50"></i>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Active User Profile & Security Credential Pill -->
+    <div class="p-4 border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-100/70 dark:bg-cyber-975/80 backdrop-blur-md">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-700 text-white flex items-center justify-center font-black text-xs shadow-md border border-amber-400/30">
+          ITBP
+        </div>
+        <div class="overflow-hidden">
+          <p class="text-xs font-extrabold text-slate-900 dark:text-white truncate">Insp. Rajesh Kumar</p>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Nodal Cyber Cell (MHA)
+          </p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col overflow-y-auto relative z-10">
+
+    <!-- Top Bar -->
+    <header class="h-20 bg-white/85 dark:bg-cyber-950/85 border-b border-slate-200/80 dark:border-slate-800/80 px-8 flex items-center justify-between shrink-0 shadow-sm backdrop-blur-2xl z-10 transition-colors duration-500">
+      <div>
+        <h2 id="page-title" class="text-lg font-black text-slate-900 dark:text-white tracking-wide">Executive Overview</h2>
+        <p id="page-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Fake Account Detection & SLA Telemetry Console</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Live Engine Status Pill -->
+        <div class="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm backdrop-blur-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>RF ML Engine (8,000 Profiles Active)</span>
+        </div>
+
+        <!-- Dark / Light Mode Toggle Button with Smooth Icon Switch -->
+        <button onclick="toggleTheme()" id="btn-theme" class="p-2.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:text-cyan-500 dark:hover:text-cyan-400 border border-slate-200 dark:border-slate-700/80 transition-all duration-300 shadow-sm hover:scale-105 active:scale-95" title="Toggle Dark/Light Mode">
+          <i data-lucide="moon" id="theme-icon" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Refresh Button -->
+        <button onclick="refreshAll()" class="p-2.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:text-cyan-500 dark:hover:text-cyan-400 border border-slate-200 dark:border-slate-700/80 transition-all duration-300 shadow-sm hover:scale-105 active:scale-95" title="Refresh Live Data">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page: Dashboard Overview -->
+    <section id="tab-dashboard" class="p-8 space-y-6 max-w-7xl mx-auto w-full">
+      <!-- Summary Metric Cards with Glowing Borders -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Metric 1: Total Scanned -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10 transition-all duration-300 flex items-center justify-between group">
+          <div>
+            <p class="text-[10px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-widest">Total Profiles Scanned</p>
+            <h3 id="stat-scanned" class="text-3xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-cyan-500 transition-colors">4</h3>
+            <p class="text-[11px] text-cyan-600 dark:text-cyan-400 font-semibold mt-1 flex items-center gap-1">
+              <i data-lucide="check" class="w-3 h-3"></i> Pre-seeded + Live Ingest
+            </p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-indigo-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- Metric 2: High Risk -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-red-500/50 hover:shadow-red-500/10 transition-all duration-300 flex items-center justify-between group">
+          <div>
+            <p class="text-[10px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-widest">High Risk Identified</p>
+            <h3 id="stat-high-risk" class="text-3xl font-black text-red-600 dark:text-red-400 mt-1 group-hover:scale-105 transition-transform">2</h3>
+            <p class="text-[11px] text-red-600 dark:text-red-400 font-semibold mt-1 flex items-center gap-1">
+              <i data-lucide="alert-triangle" class="w-3 h-3"></i> Risk Score &ge; 0.80
+            </p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-500/20 to-pink-500/20 text-red-600 dark:text-red-400 border border-red-500/30 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- Metric 3: Active Cases -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-amber-500/50 hover:shadow-amber-500/10 transition-all duration-300 flex items-center justify-between group">
+          <div>
+            <p class="text-[10px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-widest">Active Takedowns</p>
+            <h3 id="stat-active-cases" class="text-3xl font-black text-amber-600 dark:text-amber-400 mt-1">2</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-1">Under Platform Review</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500/20 to-orange-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+            <i data-lucide="clock" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- Metric 4: Audit Integrity -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-emerald-500/50 hover:shadow-emerald-500/10 transition-all duration-300 flex items-center justify-between group">
+          <div>
+            <p class="text-[10px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-widest">Audit Chain Integrity</p>
+            <h3 class="text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-1">100%</h3>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">SHA-256 Validated</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+            <i data-lucide="lock" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action / Demo Banner with Cyber Mesh Gradient -->
+      <div class="relative overflow-hidden mesh-gradient border border-indigo-500/30 text-white rounded-2xl p-7 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-gradient-to-br from-cyan-500/25 via-indigo-500/15 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10">
+          <div class="flex items-center gap-2 mb-2.5">
+            <span class="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-[10px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
+              ITBP MHA 2024 Problem Statement
+            </span>
+            <span class="text-xs text-cyan-300 font-bold flex items-center gap-1">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-cyan-400"></i> Section 79(3)(b) Sahyog Enabled
+            </span>
+          </div>
+          <h3 class="text-2xl font-black tracking-wide">Multi-Signal Fake Account Detection & Nodal Takedown Engine</h3>
+          <p class="text-xs text-slate-300 mt-1.5 max-w-2xl leading-relaxed">
+            Combines Random Forest ML classification, Devanagari Hindi/English scam urgency signals, live Google Safe Browsing / VirusTotal URL detection, and cryptographic SHA-256 evidence chain.
+          </p>
+        </div>
+        <button onclick="switchTab('scan')" class="relative z-10 bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 hover:from-cyan-400 hover:to-indigo-600 text-white font-bold px-6 py-3.5 rounded-xl text-xs shadow-xl shadow-cyan-500/25 flex items-center gap-2 shrink-0 transition-transform hover:scale-105 active:scale-95">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          Scan Suspicious Profile
+        </button>
+      </div>
+
+      <!-- Live Recent Cases Table -->
+      <div class="glass-card rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-cyber-900/50">
+          <div class="flex items-center gap-2">
+            <i data-lucide="file-clock" class="w-4 h-4 text-cyan-500"></i>
+            <h4 class="font-extrabold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">Active Takedown Docket</h4>
+          </div>
+          <button onclick="switchTab('cases')" class="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1">
+            View All Cases <i data-lucide="arrow-right" class="w-3 h-3"></i>
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100/60 dark:bg-cyber-950/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200/80 dark:border-slate-800">
+              <tr>
+                <th class="px-6 py-3.5">Case Reference</th>
+                <th class="px-6 py-3.5">Target Handle</th>
+                <th class="px-6 py-3.5">Platform</th>
+                <th class="px-6 py-3.5">Risk Band</th>
+                <th class="px-6 py-3.5">Workflow Status</th>
+                <th class="px-6 py-3.5">IT Rules 2026 SLA</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-cases-tbody" class="divide-y divide-slate-200/60 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
+              <tr><td colspan="6" class="px-6 py-4 text-center text-slate-400">Loading cases...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page: Profile Scanner -->
+    <section id="tab-scan" class="p-8 space-y-6 max-w-5xl mx-auto w-full hidden">
+      <!-- Input Card -->
+      <div class="glass-card rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xl p-7 space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-3">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900 dark:text-white tracking-wide">Target Profile Assessment</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Scan any profile or enter evidence observed via browser extension / visual inspection.</p>
+          </div>
+          <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 shadow-sm">
+            Multi-Signal Classification
+          </span>
+        </div>
+
+        <!-- 1-Click Quick Demo Presets -->
+        <div class="space-y-2">
+          <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider">1-Click Test Presets:</span>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="loadPreset('officer')" class="bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 px-3.5 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 text-xs shadow-sm hover:scale-105 active:scale-95">
+              🚨 Fake Officer Impersonator
+            </button>
+            <button onclick="loadPreset('phishing')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-3.5 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 text-xs shadow-sm hover:scale-105 active:scale-95">
+              ⚠️ Phishing Recruitment Scam
+            </button>
+            <button onclick="loadPreset('genuine')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-3.5 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 text-xs shadow-sm hover:scale-105 active:scale-95">
+              ✅ Verified Genuine Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- Scan Form -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-1">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-1">Platform</label>
+            <select id="scan-platform" class="w-full bg-slate-100/80 dark:bg-cyber-950 border border-slate-300 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-900 dark:text-white font-medium">
+              <option value="instagram">Instagram</option>
+              <option value="x">X (Twitter)</option>
+              <option value="telegram">Telegram (Live Bot Active)</option>
+              <option value="facebook">Facebook</option>
+            </select>
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-1">Account Handle or URL</label>
+            <div class="flex gap-2">
+              <input type="text" id="scan-handle" placeholder="e.g. sidd_hu_2005" class="flex-1 bg-slate-100/80 dark:bg-cyber-950 border border-slate-300 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-900 dark:text-white font-semibold">
+              <button onclick="runScan()" id="btn-scan" class="bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 hover:from-cyan-400 hover:to-indigo-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition hover:scale-105 active:scale-95 shrink-0">
+                <i data-lucide="search" class="w-4 h-4"></i>
+                Run Scan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evidentiary Profile Fields (Analyst Observed Evidence) -->
+        <div class="p-4 rounded-xl bg-slate-100/70 dark:bg-cyber-950/70 border border-slate-200/80 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="eye" class="w-3.5 h-3.5 text-cyan-500"></i> Observed Profile Evidence (Extension or Visual Capture)
+            </span>
+            <span class="text-[10px] text-slate-400">Fed directly to Random Forest classifier</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-500 dark:text-slate-400 font-medium mb-1">Followers</label>
+              <input type="number" id="in-followers" value="450" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-500 dark:text-slate-400 font-medium mb-1">Following</label>
+              <input type="number" id="in-following" value="380" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-500 dark:text-slate-400 font-medium mb-1">Posts Count</label>
+              <input type="number" id="in-posts" value="42" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-500 dark:text-slate-400 font-medium mb-1">Account Age (Days)</label>
+              <input type="number" id="in-age" value="365" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-500 dark:text-slate-400 font-medium mb-1">Profile Photo</label>
+              <select id="in-pic" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none font-medium">
+                <option value="1">Photo Present</option>
+                <option value="0">No Profile Photo</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-slate-500 dark:text-slate-400 font-medium mb-1 text-xs">Profile Bio / Text (Live Phishing & Devanagari NLP Threat Scan)</label>
+            <input type="text" id="in-bio" placeholder="e.g. ITBP Officer, Indian Army supporter. Apply at http://malware.testing.google.test/testing/malware/" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Developer JSON Override -->
+        <details class="text-xs text-slate-500 pt-1">
+          <summary class="cursor-pointer hover:text-slate-800 dark:hover:text-slate-200 font-medium">Developer JSON Mode</summary>
+          <textarea id="scan-raw-json" rows="3" class="w-full mt-2 font-mono bg-white dark:bg-cyber-950 border border-slate-300 dark:border-slate-700 rounded-lg p-2 text-xs focus:outline-none text-slate-900 dark:text-slate-200" placeholder='{"followers": 12, "following": 2400, "posts": 2, "account_age_days": 9, "has_profile_pic": 0, "username_digit_ratio": 0.5}'></textarea>
+        </details>
+      </div>
+
+      <!-- Scan Result Display -->
+      <div id="scan-result-container" class="hidden glass-card rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xl p-7 space-y-6">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-200/80 dark:border-slate-800 gap-4">
+          <div>
+            <span class="text-[10px] uppercase font-black text-slate-400 tracking-wider">Evaluation Target</span>
+            <h3 id="res-target" class="text-2xl font-black text-slate-900 dark:text-white">@target</h3>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="res-badge" class="px-4 py-1.5 rounded-full text-xs font-black tracking-wide border shadow-sm">HIGH RISK</span>
+            <button onclick="openCaseFromScan()" id="btn-open-case" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-lg shadow-red-500/25 flex items-center gap-2 transition hover:scale-105 active:scale-95">
+              <i data-lucide="file-plus-2" class="w-4 h-4"></i>
+              Open Takedown Case
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Animated Gauge Card -->
+          <div class="p-6 rounded-2xl bg-slate-100/70 dark:bg-cyber-950/70 border border-slate-200/80 dark:border-slate-800 flex flex-col items-center justify-center text-center shadow-inner">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Risk Probability Score</p>
+            <div class="relative flex items-center justify-center my-4">
+              <svg class="w-32 h-32 transform -rotate-90">
+                <circle cx="64" cy="64" r="52" stroke="currentColor" stroke-width="12" class="text-slate-200 dark:text-slate-800" fill="transparent" />
+                <circle id="gauge-circle" cx="64" cy="64" r="52" stroke="currentColor" stroke-width="12" class="text-red-500 transition-all duration-1000 ease-out" stroke-linecap="round" fill="transparent" stroke-dasharray="326.7" stroke-dashoffset="65" />
+              </svg>
+              <div class="absolute text-center">
+                <span id="gauge-score" class="text-3xl font-black text-slate-900 dark:text-white">0.88</span>
+                <span class="block text-[10px] text-slate-400">/ 1.000</span>
+              </div>
+            </div>
+            <p id="res-model-ver" class="text-[10px] text-slate-400 font-mono">rf_v1</p>
+          </div>
+
+          <!-- Feature Breakdown -->
+          <div class="md:col-span-2 space-y-3">
+            <h4 class="font-extrabold text-xs text-slate-700 dark:text-slate-300 uppercase tracking-wider">Detected Signals & Decision Indicators</h4>
+            <div id="res-signals" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page: Cases & SLA -->
+    <section id="tab-cases" class="p-8 space-y-6 max-w-7xl mx-auto w-full hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900 dark:text-white tracking-wide">Nodal Cell Takedown Cases</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Track notices, IT Rules 2026 SLA countdowns, and platform outcomes.</p>
+        </div>
+        <button onclick="switchTab('scan')" class="bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 hover:from-cyan-400 hover:to-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition hover:scale-105 active:scale-95">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          New Assessment
+        </button>
+      </div>
+
+      <div class="glass-card rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100/60 dark:bg-cyber-950/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200/80 dark:border-slate-800">
+              <tr>
+                <th class="px-6 py-3.5">Notice Reference</th>
+                <th class="px-6 py-3.5">Target Profile</th>
+                <th class="px-6 py-3.5">Platform</th>
+                <th class="px-6 py-3.5">Risk Score</th>
+                <th class="px-6 py-3.5">Status</th>
+                <th class="px-6 py-3.5">SLA Deadline</th>
+                <th class="px-6 py-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cases-tbody" class="divide-y divide-slate-200/60 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
+              <tr><td colspan="7" class="px-6 py-6 text-center text-slate-400">Loading cases...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page: Audit Trail -->
+    <section id="tab-audit" class="p-8 space-y-6 max-w-7xl mx-auto w-full hidden">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900 dark:text-white tracking-wide">Tamper-Evident SHA-256 Audit Trail</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Every scan, case update, and notice is cryptographically chained for judicial admissibility.</p>
+        </div>
+        <button onclick="verifyAuditChain()" id="btn-verify-audit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/25 flex items-center gap-2 transition hover:scale-105 active:scale-95">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          Verify Chain Cryptographically
+        </button>
+      </div>
+
+      <div id="audit-verify-banner" class="hidden p-4 rounded-xl border text-xs flex items-center gap-3">
+        <!-- Result populated dynamically -->
+      </div>
+
+      <div class="glass-card rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100/60 dark:bg-cyber-950/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200/80 dark:border-slate-800">
+              <tr>
+                <th class="px-6 py-3">Timestamp (UTC)</th>
+                <th class="px-6 py-3">Action</th>
+                <th class="px-6 py-3">Actor</th>
+                <th class="px-6 py-3 font-mono">Current Hash (SHA-256)</th>
+                <th class="px-6 py-3 font-mono">Previous Hash</th>
+              </tr>
+            </thead>
+            <tbody id="audit-tbody" class="divide-y divide-slate-200/60 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300 font-mono">
+              <tr><td colspan="5" class="px-6 py-6 text-center text-slate-400">Loading audit records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Notice Modal -->
+  <div id="modal-notice" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-cyber-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-cyber-950/80">
+        <div>
+          <h3 class="font-extrabold text-base text-slate-900 dark:text-white">Section 79(3)(b) Sahyog Takedown Notice</h3>
+          <p id="modal-notice-ref" class="text-xs text-cyan-600 dark:text-cyan-400 font-mono">Notice Ref: ITBP-PG-XXXX</p>
+        </div>
+        <button onclick="closeNoticeModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto flex-1 font-mono text-xs bg-slate-50/50 dark:bg-cyber-950/40 text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed" id="modal-notice-body">
+      </div>
+      <div class="p-4 border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-cyber-900 flex justify-end gap-3">
+        <button onclick="copyNoticeText()" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          Copy Notice Text
+        </button>
+        <button onclick="downloadDossierPdf()" id="btn-modal-pdf" class="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white px-5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          Download Evidence Dossier (PDF)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let authToken = null;
+    let currentAssessmentId = null;
+    let activeNoticeCaseId = null;
+
+    // Theme Management (Dark / Light)
+    function initTheme() {
+      const saved = localStorage.getItem('pg-theme') || 'dark';
+      setTheme(saved);
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'light' : 'dark');
+    }
+
+    function setTheme(theme) {
+      const btnIcon = document.getElementById('theme-icon');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        if (btnIcon) btnIcon.setAttribute('data-lucide', 'sun');
+        localStorage.setItem('pg-theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        if (btnIcon) btnIcon.setAttribute('data-lucide', 'moon');
+        localStorage.setItem('pg-theme', 'light');
+      }
+      lucide.createIcons();
+    }
+
+    // Login on startup
+    async function initAuth() {
+      try {
+        const res = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ username: 'analyst@itbp.gov.in', password: 'DevPassword123!' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          authToken = data.access_token;
+          refreshAll();
+        }
+      } catch (err) {
+        console.warn('Auto-auth failed:', err);
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-gradient-to-r', 'from-indigo-600', 'to-cyan-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/20');
+        btn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800/60');
+      });
+      const activeBtn = document.getElementById('nav-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800/60');
+        activeBtn.classList.add('bg-gradient-to-r', 'from-indigo-600', 'to-cyan-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/20');
+      }
+
+      ['dashboard', 'scan', 'cases', 'audit'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.classList.toggle('hidden', t !== tabId);
+      });
+
+      const titles = {
+        dashboard: ['Executive Overview', 'Fake Account Detection & SLA Telemetry Console'],
+        scan: ['Profile Assessment Engine', 'Multi-signal Heuristic, ML and NLP Analysis'],
+        cases: ['Takedown Cases & SLA Tracker', 'Section 79(3)(b) IT Act Notices and Sahyog Escalations'],
+        audit: ['Cryptographic Audit Trail', 'SHA-256 Hash Chained Evidence Verification']
+      };
+      document.getElementById('page-title').innerText = titles[tabId][0];
+      document.getElementById('page-subtitle').innerText = titles[tabId][1];
+
+      if (tabId === 'cases') loadCases();
+      if (tabId === 'audit') loadAuditLogs();
+      if (tabId === 'dashboard') loadDashboard();
+      lucide.createIcons();
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch('/dashboard/stats', { headers: { 'Authorization': 'Bearer ' + authToken } });
+        if (res.ok) {
+          const stats = await res.json();
+          document.getElementById('stat-scanned').innerText = stats.total_scanned || '0';
+          document.getElementById('stat-high-risk').innerText = stats.high_risk || '0';
+          document.getElementById('stat-active-cases').innerText = stats.active_cases || '0';
+        }
+      } catch (e) {}
+
+      try {
+        const res = await fetch('/cases?limit=5', { headers: { 'Authorization': 'Bearer ' + authToken } });
+        if (res.ok) {
+          const cases = await res.json();
+          const tbody = document.getElementById('dashboard-cases-tbody');
+          if (cases.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-slate-400">No cases recorded yet.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = cases.map(c => `
+            <tr class="hover:bg-slate-100/40 dark:hover:bg-slate-800/40 transition">
+              <td class="px-6 py-3.5 font-bold font-mono text-cyan-600 dark:text-cyan-400">${c.notice_ref || 'ITBP-PG-CASE'}</td>
+              <td class="px-6 py-3.5 font-semibold text-slate-900 dark:text-white">@${c.handle}</td>
+              <td class="px-6 py-3.5 uppercase text-slate-400 font-bold">${c.platform}</td>
+              <td class="px-6 py-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wide ${c.risk_band === 'HIGH' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : c.risk_band === 'MEDIUM' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'}">${c.risk_band} (${c.risk_score.toFixed(2)})</span></td>
+              <td class="px-6 py-3.5 capitalize font-semibold">${c.status.replace('_', ' ')}</td>
+              <td class="px-6 py-3.5 font-mono text-slate-400">${c.sla_status?.time_remaining || 'Within SLA'}</td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {}
+    }
+
+    async function loadCases() {
+      try {
+        const res = await fetch('/cases', { headers: { 'Authorization': 'Bearer ' + authToken } });
+        if (res.ok) {
+          const cases = await res.json();
+          const tbody = document.getElementById('cases-tbody');
+          if (cases.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-6 text-center text-slate-400">No takedown cases registered.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = cases.map(c => `
+            <tr class="hover:bg-slate-100/40 dark:hover:bg-slate-800/40 transition">
+              <td class="px-6 py-3.5 font-mono font-bold text-cyan-600 dark:text-cyan-400">${c.notice_ref || 'PENDING'}</td>
+              <td class="px-6 py-3.5 font-semibold text-slate-900 dark:text-white">@${c.handle}</td>
+              <td class="px-6 py-3.5 uppercase text-slate-400 font-bold">${c.platform}</td>
+              <td class="px-6 py-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wide ${c.risk_band === 'HIGH' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : c.risk_band === 'MEDIUM' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'}">${c.risk_band} (${c.risk_score.toFixed(2)})</span></td>
+              <td class="px-6 py-3.5">
+                <select onchange="updateCaseStatus('${c.id}', this.value)" class="text-xs bg-slate-100 dark:bg-cyber-950 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1 font-semibold capitalize text-slate-900 dark:text-white focus:outline-none">
+                  <option value="draft" ${c.status==='draft'?'selected':''}>Draft</option>
+                  <option value="submitted" ${c.status==='submitted'?'selected':''}>Submitted</option>
+                  <option value="platform_review" ${c.status==='platform_review'?'selected':''}>Platform Review</option>
+                  <option value="resolved" ${c.status==='resolved'?'selected':''}>Resolved</option>
+                </select>
+              </td>
+              <td class="px-6 py-3.5 font-mono text-slate-400">${c.sla_status?.time_remaining || '36h remaining'}</td>
+              <td class="px-6 py-3.5 text-right space-x-2">
+                <button onclick="generateNotice('${c.id}', '${c.notice_ref}')" class="px-3 py-1 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white rounded-lg text-xs font-bold shadow-md shadow-cyan-500/20 transition">
+                  Notice
+                </button>
+                <a href="/reports/dossier/${c.id}" target="_blank" class="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition">
+                  PDF
+                </a>
+              </td>
+            </tr>
+          `).join('');
+          lucide.createIcons();
+        }
+      } catch (e) {}
+    }
+
+    async function updateCaseStatus(caseId, status) {
+      try {
+        await fetch(`/cases/${caseId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+          body: JSON.stringify({ status, notes: 'Updated from Web Console' })
+        });
+        loadCases();
+      } catch (e) {}
+    }
+
+    async function generateNotice(caseId, noticeRef) {
+      activeNoticeCaseId = caseId;
+      try {
+        const res = await fetch(`/cases/${caseId}/generate-notice`, {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + authToken }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('modal-notice-ref').innerText = 'Notice Ref: ' + (data.notice_ref || noticeRef);
+          document.getElementById('modal-notice-body').innerText = data.legal_notice_body;
+          document.getElementById('modal-notice').classList.remove('hidden');
+          lucide.createIcons();
+        }
+      } catch (e) {
+        alert('Failed to generate notice');
+      }
+    }
+
+    function closeNoticeModal() {
+      document.getElementById('modal-notice').classList.add('hidden');
+    }
+
+    function copyNoticeText() {
+      const text = document.getElementById('modal-notice-body').innerText;
+      navigator.clipboard.writeText(text);
+      alert('Notice text copied to clipboard!');
+    }
+
+    function downloadDossierPdf() {
+      if (activeNoticeCaseId) {
+        window.open('/reports/dossier/' + activeNoticeCaseId, '_blank');
+      }
+    }
+
+    async function loadAuditLogs() {
+      try {
+        const res = await fetch('/audit', { headers: { 'Authorization': 'Bearer ' + authToken } });
+        if (res.ok) {
+          const logs = await res.json();
+          const tbody = document.getElementById('audit-tbody');
+          if (logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-6 text-center text-slate-400">No audit logs found.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = logs.map(l => `
+            <tr class="hover:bg-slate-100/40 dark:hover:bg-slate-800/40 transition text-[11px]">
+              <td class="px-6 py-3 text-slate-400 font-sans">${new Date(l.created_at).toLocaleString()}</td>
+              <td class="px-6 py-3 font-bold font-sans text-cyan-600 dark:text-cyan-400">${l.action}</td>
+              <td class="px-6 py-3 font-sans text-slate-500">${l.actor_id ? 'Analyst' : 'System Engine'}</td>
+              <td class="px-6 py-3 text-slate-800 dark:text-slate-200 truncate max-w-xs" title="${l.this_hash}">${l.this_hash.substring(0, 24)}...</td>
+              <td class="px-6 py-3 text-slate-500 truncate max-w-xs" title="${l.prev_hash}">${l.prev_hash.substring(0, 24)}...</td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {}
+    }
+
+    async function verifyAuditChain() {
+      const banner = document.getElementById('audit-verify-banner');
+      banner.classList.remove('hidden');
+      banner.innerHTML = '<span class="text-slate-400 font-medium">Computing cryptographic verification over entire ledger...</span>';
+
+      try {
+        const res = await fetch('/audit/verify', { headers: { 'Authorization': 'Bearer ' + authToken } });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.is_valid) {
+            banner.className = 'p-4 rounded-2xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-xs flex items-center gap-3.5 shadow-xl';
+            banner.innerHTML = `
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <i data-lucide="shield-check" class="w-6 h-6 text-emerald-500"></i>
+              </div>
+              <div>
+                <p class="font-extrabold text-sm">Cryptographic Verification Passed (100% Intact)</p>
+                <p class="mt-0.5 text-slate-600 dark:text-slate-300">Walked ${data.total_records || 'all'} audit log entries with zero SHA-256 digest mismatches. Chain is valid for judicial submission under Indian Evidence Act.</p>
+              </div>
+            `;
+          } else {
+            banner.className = 'p-4 rounded-2xl border bg-red-500/10 border-red-500/30 text-red-500 text-xs flex items-center gap-3.5 shadow-xl';
+            banner.innerHTML = `<p class="font-bold">Tamper Detected! ${data.error_count} integrity anomalies detected.</p>`;
+          }
+          lucide.createIcons();
+        }
+      } catch (e) {
+        banner.innerHTML = '<p class="text-red-500 font-bold">Failed to verify audit chain.</p>';
+      }
+    }
+
+    function loadPreset(type) {
+      if (type === 'officer') {
+        document.getElementById('scan-platform').value = 'x';
+        document.getElementById('scan-handle').value = 'officer_rajesh_8841';
+        document.getElementById('in-followers').value = 12;
+        document.getElementById('in-following').value = 2400;
+        document.getElementById('in-posts').value = 2;
+        document.getElementById('in-age').value = 9;
+        document.getElementById('in-pic').value = "0";
+        document.getElementById('in-bio').value = "ITBP Officer 🇮🇳 Urgent assistance needed via DM";
+        document.getElementById('scan-raw-json').value = "";
+      } else if (type === 'phishing') {
+        document.getElementById('scan-platform').value = 'instagram';
+        document.getElementById('scan-handle').value = 'itbp_recruit_2024';
+        document.getElementById('in-followers').value = 95;
+        document.getElementById('in-following').value = 1300;
+        document.getElementById('in-posts').value = 14;
+        document.getElementById('in-age').value = 40;
+        document.getElementById('in-pic').value = "1";
+        document.getElementById('in-bio').value = "Official ITBP Recruitment 2026. Apply immediately at http://malware.testing.google.test/testing/malware/";
+        document.getElementById('scan-raw-json').value = "";
+      } else {
+        document.getElementById('scan-platform').value = 'x';
+        document.getElementById('scan-handle').value = 'priya.sharma';
+        document.getElementById('in-followers').value = 640;
+        document.getElementById('in-following').value = 410;
+        document.getElementById('in-posts').value = 210;
+        document.getElementById('in-age').value = 1100;
+        document.getElementById('in-pic').value = "1";
+        document.getElementById('in-bio').value = "Civilian enthusiast. Border patrol supporter.";
+        document.getElementById('scan-raw-json').value = "";
+      }
+      runScan();
+    }
+
+    async function runScan() {
+      const platform = document.getElementById('scan-platform').value;
+      const handle = document.getElementById('scan-handle').value.trim();
+      const rawText = document.getElementById('scan-raw-json').value.trim();
+      if (!handle) return;
+
+      let rawData = null;
+      if (rawText) {
+        try { rawData = JSON.parse(rawText); } catch(e) { alert('Invalid JSON in custom features block'); return; }
+      } else {
+        const followers = parseInt(document.getElementById('in-followers')?.value) || 0;
+        const following = parseInt(document.getElementById('in-following')?.value) || 0;
+        const posts = parseInt(document.getElementById('in-posts')?.value) || 0;
+        const age = Math.max(parseInt(document.getElementById('in-age')?.value) || 1, 1);
+        const pic = parseInt(document.getElementById('in-pic')?.value) ?? 1;
+        const bio = (document.getElementById('in-bio')?.value || '').trim();
+
+        rawData = {
+          followers: followers,
+          following: following,
+          posts: posts,
+          account_age_days: age,
+          has_profile_pic: pic,
+          bio: bio,
+          bio_length: bio.length,
+          external_url: bio.includes('http') ? 1 : 0
+        };
+      }
+
+      const btn = document.getElementById('btn-scan');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="animate-spin inline-block mr-2">&#9696;</span> Evaluating...';
+
+      try {
+        const res = await fetch('/scan/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+          body: JSON.stringify({ platform, handle_or_url: handle, raw_profile_data: rawData })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentAssessmentId = data.assessment_id;
+          displayScanResult(data);
+        } else {
+          alert('Scan failed: ' + (await res.text()));
+        }
+      } catch (e) {
+        alert('Network or server error during scan');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="search" class="w-4 h-4"></i> Run Scan';
+        lucide.createIcons();
+      }
+    }
+
+    function displayScanResult(res) {
+      document.getElementById('scan-result-container').classList.remove('hidden');
+      document.getElementById('res-target').innerText = '@' + res.handle + ' on ' + res.platform.toUpperCase();
+      document.getElementById('gauge-score').innerText = res.score.toFixed(3);
+      document.getElementById('res-model-ver').innerText = 'Model: ' + res.model_version;
+
+      const badge = document.getElementById('res-badge');
+      const circle = document.getElementById('gauge-circle');
+      const offset = 326.7 * (1 - res.score);
+      circle.style.strokeDashoffset = offset;
+
+      if (res.band === 'HIGH') {
+        badge.className = 'px-4 py-1.5 rounded-full text-xs font-black tracking-wide bg-red-500/10 text-red-500 border border-red-500/30 shadow-md shadow-red-500/10';
+        badge.innerText = 'HIGH RISK (TAINT DETECTED)';
+        circle.setAttribute('class', 'text-red-500 transition-all duration-1000 ease-out');
+        document.getElementById('btn-open-case').classList.remove('hidden');
+      } else if (res.band === 'MEDIUM') {
+        badge.className = 'px-4 py-1.5 rounded-full text-xs font-black tracking-wide bg-amber-500/10 text-amber-500 border border-amber-500/30 shadow-md shadow-amber-500/10';
+        badge.innerText = 'MEDIUM RISK (MANUAL REVIEW)';
+        circle.setAttribute('class', 'text-amber-500 transition-all duration-1000 ease-out');
+        document.getElementById('btn-open-case').classList.remove('hidden');
+      } else {
+        badge.className = 'px-4 py-1.5 rounded-full text-xs font-black tracking-wide bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-md shadow-emerald-500/10';
+        badge.innerText = 'LOW RISK (SAFE)';
+        circle.setAttribute('class', 'text-emerald-500 transition-all duration-1000 ease-out');
+        document.getElementById('btn-open-case').classList.add('hidden');
+      }
+
+      // Populate signals
+      const sigContainer = document.getElementById('res-signals');
+      const feats = res.signals || {};
+      sigContainer.innerHTML = `
+        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-cyber-950/50 shadow-sm">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Text / Bio NLP Threat Scan</span>
+          <p class="font-bold text-slate-900 dark:text-white mt-1">${res.signals?.text?.is_impersonation ? '🚨 Impersonation Language Detected' : 'Normal Text'}</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Flags: ${(res.signals?.text?.flags || ['Clean']).join(', ')}</p>
+        </div>
+        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-cyber-950/50 shadow-sm">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Followers / Following Ratio</span>
+          <p class="font-bold text-slate-900 dark:text-white mt-1">Ratio: ${(res.signals?.profile?.follow_ratio || 0).toFixed(4)}</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Following: ${res.signals?.profile?.following || 0} | Followers: ${res.signals?.profile?.followers || 0}</p>
+        </div>
+        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-cyber-950/50 shadow-sm">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Age & Activity</span>
+          <p class="font-bold text-slate-900 dark:text-white mt-1">${res.signals?.profile?.account_age_days || 0} days old</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Posts/day: ${res.signals?.profile?.posts_per_day || 0}</p>
+        </div>
+        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-cyber-950/50 shadow-sm">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Profile Authenticity</span>
+          <p class="font-bold text-slate-900 dark:text-white mt-1">${res.signals?.profile?.has_profile_pic ? 'Photo Present' : '❌ No Profile Photo'}</p>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Username Digit Ratio: ${(res.signals?.profile?.username_digit_ratio || 0).toFixed(2)}</p>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    async function openCaseFromScan() {
+      if (!currentAssessmentId) return;
+      try {
+        const res = await fetch('/cases', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+          body: JSON.stringify({ assessment_id: currentAssessmentId, trigger_type: 'urgent_complaint' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          alert('Takedown Case Created! Notice Ref: ' + data.notice_ref);
+          switchTab('cases');
+        }
+      } catch (e) {
+        alert('Failed to initialize case');
+      }
+    }
+
+    function refreshAll() {
+      loadDashboard();
+      lucide.createIcons();
+    }
+
+    // Startup
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initAuth();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

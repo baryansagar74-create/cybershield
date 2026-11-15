@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="header">
+    <div class="logo-box">
+      <img src="icons/icon_48.png" alt="ProfileGuard" class="logo-img" onerror="this.style.display='none'">
+      <div class="radar-dot"></div>
+    </div>
+    <div>
+      <h1 class="title">ProfileGuard</h1>
+      <p class="subtitle">ITBP / MHA Cyber Forensics</p>
+    </div>
+  </div>
+
+  <div class="status-box">
+    <div class="status-row">
+      <span class="label">Platform:</span>
+      <span id="detected-platform" class="value pill">Detecting...</span>
+    </div>
+    <div class="status-row" style="margin-top: 8px;">
+      <span class="label">Target:</span>
+      <span id="detected-handle" class="value font-mono">None</span>
+    </div>
+  </div>
+
+  <button id="capture-btn" class="btn">
+    <span class="btn-text">Capture & Transmit Evidence</span>
+  </button>
+
+  <div id="result-status" class="result-status"></div>
+
+  <div class="footer">
+    Analyst-consented forensic capture • DPDP Act 2023 Compliant
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
