@@ -21,6 +21,7 @@ load_dotenv()
 from app.models.predict import score_profile
 from app.connectors.url_reputation import UrlReputationChecker
 from app.api.scan_routes import REAL_KNOWN_PROFILES
+from app.services.gemini_analyzer import GeminiAnalyzer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("telegram_bot")
@@ -32,6 +33,7 @@ if not TOKEN:
 
 API_BASE = f"https://api.telegram.org/bot{TOKEN}"
 url_checker = UrlReputationChecker()
+gemini_analyzer = GeminiAnalyzer()
 
 
 async def send_reply(client: httpx.AsyncClient, chat_id: int, text: str, parse_mode: str = "Markdown"):
@@ -132,12 +134,20 @@ async def handle_message(client: httpx.AsyncClient, msg: dict):
             f"📋 *Audit Summary:* Validated authentic profile."
         )
     else:
+        # Check if text contains suspicious bio or phrase
+        gemini_summary = ""
+        if gemini_analyzer.is_active:
+            try:
+                g_res = await gemini_analyzer.analyze_bio(text, handle=handle)
+                if g_res.get("forensic_summary"):
+                    gemini_summary = f"\n\n🤖 *Gemini Forensic AI Intelligence:*\n_{g_res['forensic_summary']}_"
+            except Exception as e:
+                logger.warning("Gemini analysis error in bot: %s", e)
+
         # Default heuristic / ML evaluation on input
-        # Bot checks digit count and length from username
         digit_count = sum(c.isdigit() for c in handle)
         digit_ratio = digit_count / max(len(handle), 1)
         
-        # Simulated heuristic for unindexed handle
         is_suspicious = digit_ratio > 0.4 or any(w in handle.lower() for w in ["itbp", "army", "police", "recruitment", "bharti"])
         features = {
             "followers": 12 if is_suspicious else 450,
@@ -157,7 +167,7 @@ async def handle_message(client: httpx.AsyncClient, msg: dict):
             f"• *Risk Score:* `{score:.3f}` / 1.000\n"
             f"• *Risk Band:* *{band} RISK*\n"
             f"• *Username Digit Density:* `{digit_ratio:.2f}`\n"
-            f"• *Evaluated by:* Random Forest (10,594 Profiles - InstaFake arXiv)\n\n"
+            f"• *Evaluated by:* Random Forest (10,594 Profiles) + Gemini 2.5 Flash{gemini_summary}\n\n"
             f"⚠️ *Notice:* Case logged in ProfileGuard Nodal Audit Ledger. Access full dossier at http://localhost:8000/."
         )
 

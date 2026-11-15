@@ -26,9 +26,11 @@ from app.features.text_analysis import analyze_text
 from app.features.url_analysis import evaluate_urls, extract_urls
 from app.models.predict import score_profile
 from app.security.auth import get_current_user, get_current_user_optional
+from app.services.gemini_analyzer import GeminiAnalyzer
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/scan", tags=["Profile Scanner"])
+gemini_analyzer = GeminiAnalyzer()
 
 
 class ScanRequestPayload(BaseModel):
@@ -177,9 +179,18 @@ async def scan_profile(
     # 1. Extract standard 11 tabular features
     profile_features = extract_features(platform, raw_data)
 
-    # 2. Text / NLP Analysis on bio or status
+    # 2. Text / NLP Analysis on bio or status (Keyword + Gemini LLM)
     bio_text = raw_data.get("description", raw_data.get("bio", raw_data.get("biography", "")))
     text_res = analyze_text(bio_text)
+    
+    # Contextual analysis via Gemini 2.5 Flash if bio text present
+    gemini_res = {}
+    if bio_text and gemini_analyzer.is_active:
+        gemini_res = await gemini_analyzer.analyze_bio(bio_text, handle=handle)
+        if gemini_res.get("is_impersonation") or gemini_res.get("is_recruitment_scam"):
+            text_res["flags"] = list(set(text_res.get("flags", []) + gemini_res.get("flags", [])))
+            text_res["is_impersonation"] = True
+            text_res["gemini_forensic_summary"] = gemini_res.get("forensic_summary")
 
     # 3. URL Phishing / Reputation Check
     found_urls = extract_urls(bio_text)
