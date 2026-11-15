@@ -1,0 +1,82 @@
+/* ProfileGuard Design System Tokens */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark Theme Default */
+  --bg-base: #081A33;
+  --bg-raised: #0F2A4D;
+  --bg-sunken: #06142A;
+  --line: #1E3A63;
+  --text: #E8EEF6;
+  --text-muted: #93A4BD;
+  --brand-teal: #12A89D;
+  --brand-saffron: #F28C28;
+  --risk-high: #E5484D;
+  --risk-low: #2F9E62;
+  --evidence: #8FA3C0;
+}
+
+html.light {
+  /* Light Theme Alternative */
+  --bg-base: #F3F6FA;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #E6ECF4;
+  --line: #D3DCE8;
+  --text: #0B2545;
+  --text-muted: #51627C;
+  --brand-teal: #0E8C83;
+  --brand-saffron: #C96A0C;
+  --risk-high: #C73338;
+  --risk-low: #237A4B;
+  --evidence: #51627C;
+}
+
+/* Accessibility Focus Ring: 2px teal, 2px offset */
+*:focus-visible {
+  outline: 2px solid var(--brand-teal) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(18, 168, 157, 0.25) !important;
+}
+
+/* Tabular Numerals for Monospace Data */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faint dot grid for scan page */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(147, 164, 189, 0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Density Compact Mode overrides */
+html.density-compact td, 
+html.density-compact th {
+  padding-top: 0.375rem !important;
+  padding-bottom: 0.375rem !important;
+}
+
+html.density-compact .stat-tile {
+  padding: 0.75rem !important;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html.reduced-motion *, 
+html.reduced-motion ::before, 
+html.reduced-motion ::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
