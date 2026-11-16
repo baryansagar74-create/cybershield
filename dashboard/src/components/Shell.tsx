@@ -29,7 +29,8 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
     language,
     setLanguage,
     logout,
-    cases
+    cases,
+    runLiveScan,
   } = useApp();
 
   const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -171,8 +172,9 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
                   placeholder="Quick search handles, case ref, hashes... (/)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => {
+                  onKeyDown={async (e) => {
                     if (e.key === 'Enter' && searchQuery.trim()) {
+                      await runLiveScan(searchQuery.trim());
                       setCurrentScreen('assessment');
                     }
                   }}

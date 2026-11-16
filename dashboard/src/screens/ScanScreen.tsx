@@ -17,17 +17,29 @@ export const ScanScreen: React.FC = () => {
     e.preventDefault();
     if (!inputHandle.trim()) return;
     setIsScanning(true);
+    try {
+      const scanned = await runLiveScan(inputHandle.trim());
+      setSelectedAccountId(scanned.id);
+    } catch (err) {
+      console.error("Live scan failed:", err);
+    } finally {
+      setIsScanning(false);
+      setCurrentScreen('assessment');
+    }
   };
 
-  const handlePipelineComplete = () => {
-    const clean = inputHandle.replace('@', '').trim();
-    const found = accounts.find((a) => a.handle.toLowerCase() === clean.toLowerCase());
-    if (found) {
-      setSelectedAccountId(found.id);
-    } else {
-      setSelectedAccountId("acc-001");
+  const handlePresetClick = async (preset: string) => {
+    setInputHandle(preset);
+    setIsScanning(true);
+    try {
+      const scanned = await runLiveScan(preset);
+      setSelectedAccountId(scanned.id);
+    } catch (err) {
+      console.error("Live scan failed:", err);
+    } finally {
+      setIsScanning(false);
+      setCurrentScreen('assessment');
     }
-    setCurrentScreen('assessment');
   };
 
   return (
@@ -49,7 +61,7 @@ export const ScanScreen: React.FC = () => {
       {isScanning ? (
         <ScanPipeline
           targetHandle={inputHandle}
-          onComplete={handlePipelineComplete}
+          onComplete={() => setCurrentScreen('assessment')}
         />
       ) : (
         <div className="w-full max-w-2xl glass-panel rounded-[24px] shadow-[0_24px_70px_rgba(0,0,0,0.55)] p-6 md:p-8 space-y-6 border border-white/20">
@@ -112,31 +124,31 @@ export const ScanScreen: React.FC = () => {
               <div className="flex flex-wrap gap-2 text-xs">
                 <button
                   type="button"
-                  onClick={() => setInputHandle('officer_rajesh_8841')}
+                  onClick={() => handlePresetClick('officer_rajesh_8841')}
                   className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 hover:border-[#FF3D8B] text-white font-mono text-[11px] transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
                 >
                   @officer_rajesh_8841 <span className="text-[#FF5C7C] font-bold">(HIGH)</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setInputHandle('itbp_recruit_2024')}
+                  onClick={() => handlePresetClick('cristiano')}
+                  className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 hover:border-[#12D8C4] text-white font-mono text-[11px] transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
+                >
+                  @cristiano <span className="text-[#12D8C4] font-bold">(GENUINE)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handlePresetClick('itbp_recruit_2024')}
                   className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 hover:border-[#FF3D8B] text-white font-mono text-[11px] transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
                 >
                   @itbp_recruit_2024 <span className="text-[#FF5C7C] font-bold">(HIGH)</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setInputHandle('bsf.jawan.fan')}
-                  className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 hover:border-[#FF9F2E] text-white font-mono text-[11px] transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
-                >
-                  @bsf.jawan.fan <span className="text-[#FFB259] font-bold">(MEDIUM)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setInputHandle('priya.sharma')}
+                  onClick={() => handlePresetClick('nasa')}
                   className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 hover:border-[#3DDC97] text-white font-mono text-[11px] transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
                 >
-                  @priya.sharma <span className="text-[#3DDC97] font-bold">(LOW)</span>
+                  @nasa <span className="text-[#3DDC97] font-bold">(ORGANIZATION)</span>
                 </button>
               </div>
             </div>

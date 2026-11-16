@@ -175,9 +175,16 @@ async def scan_profile(
     bio_text = raw_data.get("description", raw_data.get("bio", raw_data.get("biography", "")))
     text_res = analyze_text(bio_text)
     
-    # Contextual analysis via Gemini 2.5 Flash if bio text present
-    gemini_res = {}
-    if bio_text and gemini_analyzer.is_active:
+    # Use forensic analysis from live resolver if available, or analyze bio via Gemini
+    if "is_impersonation" in raw_data:
+        if raw_data.get("is_impersonation") or raw_data.get("is_scam"):
+            text_res["flags"] = list(set(text_res.get("flags", []) + raw_data.get("threat_flags", []) + ["Impersonation Detected"]))
+            text_res["is_impersonation"] = True
+            text_res["gemini_forensic_summary"] = raw_data.get("forensic_summary")
+            text_res["text_risk_score"] = 0.85
+        else:
+            text_res["gemini_forensic_summary"] = raw_data.get("forensic_summary")
+    elif bio_text and gemini_analyzer.is_active:
         gemini_res = await gemini_analyzer.analyze_bio(bio_text, handle=handle)
         if gemini_res.get("is_impersonation") or gemini_res.get("is_recruitment_scam"):
             text_res["flags"] = list(set(text_res.get("flags", []) + gemini_res.get("flags", [])))

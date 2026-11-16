@@ -112,18 +112,21 @@ export const AssessmentScreen: React.FC = () => {
       </div>
 
       {/* 2. REAL SCAN INPUT BAR (Allows user to test ANY handle live) */}
-      <div className="glass-panel rounded-[18px] p-3 flex flex-col sm:flex-row items-center gap-3">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (customHandleInput.trim()) {
+            handleLiveScan(customHandleInput.trim());
+          }
+        }}
+        className="glass-panel rounded-[18px] p-3 flex flex-col sm:flex-row items-center gap-3"
+      >
         <div className="relative flex-1 w-full">
           <input
             type="text"
-            placeholder="Type any live target to scan (e.g. @elonmusk, @itbp_official, @officer_rajesh_8841)..."
+            placeholder="Type any live target to scan (e.g. @cristiano, @nasa, @itbp_official, @officer_rajesh_8841)..."
             value={customHandleInput}
             onChange={(e) => setCustomHandleInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && customHandleInput.trim()) {
-                handleLiveScan(customHandleInput);
-              }
-            }}
             className="w-full glass-input rounded-[12px] px-3.5 py-2 text-xs font-mono text-white placeholder-white/40 focus:outline-none"
           />
           <Search className="w-4 h-4 text-white/40 absolute right-3 top-2.5" />
@@ -131,7 +134,7 @@ export const AssessmentScreen: React.FC = () => {
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
-            onClick={() => handleLiveScan(customHandleInput || 'elonmusk')}
+            type="submit"
             disabled={isScanningLive}
             className="px-4 py-2 rounded-[12px] bg-gradient-to-r from-[#12D8C4] to-[#0FA79B] text-[#032622] font-bold text-xs shadow-glow-teal hover:scale-105 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
@@ -165,7 +168,28 @@ export const AssessmentScreen: React.FC = () => {
             @officer_rajesh (Fake)
           </button>
         </div>
-      </div>
+      </form>
+
+      {/* LIVE SCAN IN PROGRESS BANNER */}
+      {isScanningLive && (
+        <div className="p-4 rounded-[16px] bg-gradient-to-r from-[#12D8C4]/20 via-[#7A4DFF]/20 to-[#FF3D8B]/20 border border-[#12D8C4]/50 shadow-[0_0_30px_rgba(18,216,196,0.35)] flex items-center justify-between animate-pulse">
+          <div className="flex items-center gap-3">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#12D8C4] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#12D8C4]"></span>
+            </span>
+            <div>
+              <span className="text-xs font-bold text-white font-mono block">
+                Executing Live Multi-Signal OSINT Inference via Gemini & ML...
+              </span>
+              <span className="text-[11px] text-[#A9B9E0] font-mono">
+                Extracting profile telemetry & DP • Running Google Safe Browsing • Evaluating Random Forest (10,594 benchmark)
+              </span>
+            </div>
+          </div>
+          <span className="text-xs font-mono font-bold text-[#12D8C4] bg-[#12D8C4]/20 px-2.5 py-1 rounded-full border border-[#12D8C4]/40">SCANNING ACTIVE</span>
+        </div>
+      )}
 
       {/* 3. FOUR GLOSSY NEON STAT TILES FROM REFERENCE MOCKUP */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

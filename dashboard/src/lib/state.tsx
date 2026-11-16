@@ -198,15 +198,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // REAL LIVE DATA INTEGRATION: Calls backend on port 8000
-  const runLiveScan = async (handle: string, platform: Platform = 'x'): Promise<MockAccount> => {
+  const runLiveScan = async (handle: string, platform?: Platform): Promise<MockAccount> => {
     const cleanHandle = handle.replace('@', '').trim();
+    // Auto-detect platform if not specified
+    let targetPlatform: Platform = platform || 'instagram';
+    if (cleanHandle.includes('t.me') || handle.includes('t.me')) {
+      targetPlatform = 'telegram';
+    } else if (cleanHandle.includes('twitter') || cleanHandle.includes('x.com')) {
+      targetPlatform = 'x';
+    }
+
     try {
       const response = await fetch('http://localhost:8000/scan/profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          platform,
-          handle_or_url: `@${cleanHandle}`
+          platform: targetPlatform,
+          handle_or_url: cleanHandle
         })
       });
 
@@ -217,13 +225,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const text = liveData.signals?.text || {};
         const urlRep = liveData.url_analysis || {};
 
-        const isFake = liveData.score >= 0.5;
+        const isFake = (liveData.score ?? 0) >= 0.5;
 
         const newAccount: MockAccount = {
           id: `acc-live-${Date.now()}`,
           handle: liveData.handle || cleanHandle,
           name: rawProfile.name || cleanHandle,
-          platform: (liveData.platform || platform) as Platform,
+          platform: (liveData.platform || targetPlatform) as Platform,
           score: Number((liveData.score ?? 0.05).toFixed(2)),
           band: liveData.band || (liveData.score >= 0.8 ? 'HIGH' : liveData.score >= 0.5 ? 'MEDIUM' : 'LOW'),
           status: 'flagged',
@@ -278,9 +286,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedAccountId(newAccount.id);
         addToast(`Live scan complete for @${cleanHandle}: Score ${newAccount.score} (${newAccount.band})`, "success");
         return newAccount;
+      } else {
+        const errText = await response.text();
+        console.error("API error response:", response.status, errText);
+        addToast(`Scan error: ${response.status}`, "danger");
       }
     } catch (e) {
-      console.warn("Backend fetch failed, using realistic offline mock", e);
+      console.error("Backend fetch error:", e);
+      addToast("Backend network/CORS error", "danger");
     }
 
     // Fallback if backend unreachable

@@ -31,6 +31,9 @@ GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
 
+_PROFILE_CACHE: Dict[str, Dict[str, Any]] = {}
+
+
 class LiveProfileResolver:
     """Universal OSINT resolver for live social media profile data."""
 
@@ -42,28 +45,39 @@ class LiveProfileResolver:
         Resolve complete profile metrics for any handle or URL.
         Returns a standardized dictionary with follower counts, DP status, bio, and type.
         """
-        clean_handle = handle_or_url.strip().split("/")[-1].replace("@", "")
+        clean_handle = handle_or_url.strip().split("/")[-1].replace("@", "").lower()
         platform_lower = platform.lower().strip()
+
+        # Check in-memory cache
+        cache_key = f"{platform_lower}:{clean_handle}"
+        if cache_key in _PROFILE_CACHE:
+            logger.info("Serving @%s from OSINT in-memory cache", clean_handle)
+            return _PROFILE_CACHE[cache_key]
 
         # 1. Direct Telegram Public Web Scrape (Zero-auth, 100% live)
         if "t.me" in handle_or_url or platform_lower in ("telegram", "tg"):
             tg_data = await self._scrape_telegram(clean_handle)
             if tg_data:
+                _PROFILE_CACHE[cache_key] = tg_data
                 return tg_data
 
         # 2. Direct GitHub Public API (Zero-auth, 100% live)
         if "github.com" in handle_or_url or platform_lower == "github":
             gh_data = await self._fetch_github(clean_handle)
             if gh_data:
+                _PROFILE_CACHE[cache_key] = gh_data
                 return gh_data
 
         # 3. Gemini 2.5 Flash OSINT Entity Resolution (Worldwide coverage)
         gemini_profile = await self._resolve_with_gemini(clean_handle, platform_lower)
         if gemini_profile:
+            _PROFILE_CACHE[cache_key] = gemini_profile
             return gemini_profile
 
         # 4. Fallback Heuristic
-        return self._heuristic_fallback(clean_handle, platform_lower)
+        fallback = self._heuristic_fallback(clean_handle, platform_lower)
+        _PROFILE_CACHE[cache_key] = fallback
+        return fallback
 
     async def _scrape_telegram(self, handle: str) -> Optional[Dict[str, Any]]:
         """Scrape public Telegram page for real-world title, subscriber count, bio, and avatar."""
@@ -183,7 +197,12 @@ Respond ONLY with valid JSON. No markdown code blocks, no explanation text outsi
   "is_verified": false,
   "account_age_days": 18,
   "bio": "Extracted or inferred bio text",
-  "external_url": "Extracted or inferred link or empty string"
+  "external_url": "Extracted or inferred link or empty string",
+  "is_impersonation": false,
+  "is_scam": false,
+  "threat_level": "LOW" | "MEDIUM" | "HIGH",
+  "forensic_summary": "Two sentences explaining forensic findings",
+  "threat_flags": []
 }}
 """
 
@@ -191,18 +210,28 @@ Respond ONLY with valid JSON. No markdown code blocks, no explanation text outsi
             async with httpx.AsyncClient(timeout=25.0) as client:
                 res = await client.post(
                     f"{GEMINI_URL}?key={self.api_key}",
-                    json={"contents": [{"parts": [{"text": prompt}]}]},
+                    json={
+                        "contents": [{"parts": [{"text": prompt}]}],
+                        "generationConfig": {
+                            "responseMimeType": "application/json",
+                            "temperature": 0.1,
+                            "maxOutputTokens": 400,
+                        },
+                    },
                 )
                 if res.status_code == 200:
                     data = res.json()
                     candidates = data.get("candidates", [])
                     if candidates:
                         raw_text = candidates[0]["content"]["parts"][0]["text"].strip()
-                        # Extract JSON using regex
                         match = re.search(r"\{.*\}", raw_text, re.DOTALL)
                         if match:
                             parsed = json.loads(match.group(0))
-                            # Ensure correct types
+                            is_impers = bool(parsed.get("is_impersonation", False))
+                            is_scam = bool(parsed.get("is_scam", False))
+                            threat_lvl = str(parsed.get("threat_level", "LOW" if not (is_impers or is_scam) else "HIGH"))
+                            summary = str(parsed.get("forensic_summary", "Profile evaluated by Gemini forensic engine."))
+
                             return {
                                 "name": str(parsed.get("name", handle)),
                                 "username": str(parsed.get("username", handle)),
@@ -218,6 +247,11 @@ Respond ONLY with valid JSON. No markdown code blocks, no explanation text outsi
                                 "account_age_days": int(parsed.get("account_age_days", 180)),
                                 "bio": str(parsed.get("bio", "")),
                                 "external_url": str(parsed.get("external_url", "")),
+                                "is_impersonation": is_impers,
+                                "is_scam": is_scam,
+                                "threat_level": threat_lvl,
+                                "forensic_summary": summary,
+                                "threat_flags": list(parsed.get("threat_flags", [])),
                             }
         except Exception as exc:
             logger.error("Gemini OSINT profile resolution failed: %s", exc)

@@ -61,13 +61,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS configuration for Analyst Dashboard and Extension
+# CORS configuration for Analyst Dashboard, Vite Dev Server, and Extension
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        settings.dashboard_url,
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "http://localhost:3000",
-        "chrome-extension://*",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        settings.dashboard_url,
+        "*",
     ],
     allow_credentials=True,
     allow_methods=["*"],
