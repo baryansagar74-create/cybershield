@@ -29,7 +29,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Space Grotesk"', '"Noto Sans Devanagari"', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', '"Space Grotesk"', '"Noto Sans Devanagari"', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
         mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'monospace'],
       },
       fontSize: {

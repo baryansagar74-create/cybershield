@@ -67,12 +67,15 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#060A1E] via-[#0B1340] to-[#12093A] text-[#EAF1FF] font-sans antialiased overflow-x-hidden selection:bg-[#12D8C4] selection:text-[#032622]">
+    <div className="relative min-h-screen bg-gradient-to-br from-[#030614] via-[#070D24] to-[#0A102E] text-[#F0F4FF] font-sans antialiased overflow-x-hidden selection:bg-[#12D8C4] selection:text-[#032622]">
+      {/* CYBER GRID PATTERN OVERLAY */}
+      <div className="pointer-events-none fixed inset-0 cyber-grid opacity-75 z-0" />
+
       {/* GLOSSY COLOUR MIX AMBIENT GLOW ORBS WITH LIVING ORGANIC FLOAT ANIMATION */}
-      <div className="pointer-events-none fixed left-[-120px] top-[-140px] w-[520px] h-[520px] rounded-full bg-[#12D8C4] opacity-35 blur-[110px] z-0 animate-aurora-1" />
-      <div className="pointer-events-none fixed right-[-100px] top-[60px] w-[460px] h-[460px] rounded-full bg-[#FF3D8B] opacity-30 blur-[120px] z-0 animate-aurora-2" />
-      <div className="pointer-events-none fixed left-[380px] bottom-[-200px] w-[560px] h-[420px] rounded-full bg-[#FF9F2E] opacity-25 blur-[120px] z-0 animate-aurora-3" />
-      <div className="pointer-events-none fixed right-[220px] bottom-[-120px] w-[380px] h-[380px] rounded-full bg-[#7A4DFF] opacity-35 blur-[110px] z-0 animate-aurora-1" />
+      <div className="pointer-events-none fixed left-[-100px] top-[-100px] w-[580px] h-[580px] rounded-full bg-[#12D8C4] opacity-25 blur-[140px] z-0 animate-aurora-1" />
+      <div className="pointer-events-none fixed right-[-80px] top-[40px] w-[500px] h-[500px] rounded-full bg-[#FF3D8B] opacity-20 blur-[150px] z-0 animate-aurora-2" />
+      <div className="pointer-events-none fixed left-[340px] bottom-[-180px] w-[600px] h-[450px] rounded-full bg-[#FF9F2E] opacity-15 blur-[140px] z-0 animate-aurora-3" />
+      <div className="pointer-events-none fixed right-[180px] bottom-[-100px] w-[450px] h-[450px] rounded-full bg-[#7A4DFF] opacity-25 blur-[140px] z-0 animate-aurora-1" />
 
       {/* Main Layout Container */}
       <div className="relative z-10 flex min-h-screen p-3 md:p-6 gap-5">
