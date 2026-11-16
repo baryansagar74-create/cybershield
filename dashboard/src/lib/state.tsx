@@ -65,9 +65,9 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-  const [officerId, setOfficerId] = useState<string>("Insp. Rajesh Kumar (NC-104)");
+  const [officerId, setOfficerId] = useState<string>("Cyber Analyst (Active Session)");
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('assessment');
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>("acc-002");
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>("case-001");
   
   const [accounts, setAccounts] = useState<MockAccount[]>(mockAccounts);
@@ -105,7 +105,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const login = (id: string) => {
     setIsAuthenticated(true);
-    setOfficerId(id || "Insp. Rajesh Kumar (NC-104)");
+    setOfficerId(id || "Cyber Analyst (Active Session)");
     setCurrentScreen('dashboard');
     addToast("Signed in successfully as authorized officer.", "success");
   };

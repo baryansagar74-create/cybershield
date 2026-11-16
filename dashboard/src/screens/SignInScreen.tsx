@@ -25,7 +25,7 @@ export const SignInScreen: React.FC = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      login(`Insp. Rajesh Kumar (${officerId})`);
+      login(officerId || "Cyber Analyst (Active Session)");
     }, 500);
   };
 
