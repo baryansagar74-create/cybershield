@@ -209,7 +209,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     try {
-      const response = await fetch('http://localhost:8000/scan/profile', {
+      const apiBase = ((import.meta as any).env?.VITE_API_BASE_URL) || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:8000' : '');
+      const endpoint = apiBase ? `${apiBase.replace(/\/$/, '')}/scan/profile` : 'http://localhost:8000/scan/profile';
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
