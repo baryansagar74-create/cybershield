@@ -8,253 +8,190 @@
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React 18](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Playwright](https://img.shields.io/badge/Playwright-Chromium-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.4.0-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Prisma ORM](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://prisma.io)
-[![SQLite / PostgreSQL](https://img.shields.io/badge/Database-SQLite%20%2F%20PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
-[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![Test Suite](https://img.shields.io/badge/Pytest-43%2F43%20Passing%20(100%25)-4EBA6F?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
-[Live Web Console (Port 8000)](http://localhost:8000/) • [Interactive API Swagger Docs](http://localhost:8000/docs) • [Chrome Extension](extension/) • [Prisma Schema](prisma/schema.prisma)
+[Live Analyst Workstation (Port 5173)](http://localhost:5173/) • [Backend API (Port 8000)](http://localhost:8000/) • [Interactive Swagger Docs](http://localhost:8000/docs) • [Chrome Extension](extension/)
 
 ---
 
 </div>
+
+## 🎥 Interactive Live System Demonstration
+
+<div align="center">
+  <img src="assets/videos/walkthrough_demo.gif" alt="ProfileGuard Interactive Walkthrough Demo" width="900" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.6);" />
+  <p><i>Figure 1: Full-screen interactive walkthrough demonstrating live headless scraping of public targets, multi-signal Random Forest scoring, DP presence verification, statutory PDF dossier export, and operational overview.</i></p>
+  <p><b><a href="assets/videos/walkthrough_demo.mp4">▶️ Download High-Definition MP4 Video (1080p H.264)</a></b></p>
+</div>
+
+---
 
 ## 📌 Executive Summary & Problem Context
 
 The **Indo-Tibetan Border Police (ITBP)** guards 3,488 km of the high-altitude Indo-China border, from Karakoram Pass in Ladakh to Jachep La in Arunachal Pradesh, while executing vital counter-insurgency and anti-LWE operations across India. 
 
-Hostile state and non-state actors deploy **sophisticated fake social media accounts**, impersonating ITBP officers, running bogus military recruitment drives, harvesting troop movement telemetry, and launching phishing schemes.
+Hostile state and non-state actors deploy **sophisticated fake social media accounts**, impersonating ITBP officers, running bogus military recruitment drives, harvesting troop movement telemetry, and launching credential-harvesting phishing schemes.
 
 **ProfileGuard** is an end-to-end cyber defense and nodal enforcement system specifically tailored for the **ITBP Nodal Cyber Cell** and the **MHA / I4C Sahyog Portal**:
-1. **Multi-Signal AI Engine:** Hybrid scoring blending a **Random Forest classifier** (trained on **10,594 real labelled profiles** including the **InstaFake arXiv:1910.03090** dataset), Devanagari Hindi/English scam urgency NLP, perceptual image hashing (`pHash`) for emblem matching, and live Google Safe Browsing / VirusTotal phishing detection.
-2. **Central Nodal Takedown Workflow:** Generates formal legal notice dossiers compliant with **Section 79(3)(b) of the Information Technology Act** and **Rule 3 of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules (Amended 2026)**.
-3. **Statutory SLA Timers:** Enforces live countdown clocks for platform compliance (3h court/government notice, 36h urgent complaint, 7d general grievance, 2h intimate imagery).
-4. **Forensic Evidence Ledger:** Maintains a tamper-evident **SHA-256 hash-chained immutable audit trail** ensuring full judicial admissibility under **Section 65B of the Indian Evidence Act (Bharatiya Sakshya Adhiniyam)**.
-5. **Modernized Cyber Command Console & Extension:** Features an ultra-modern dark/light console with animated logo emblems, floating aurora colormix background textures, and a companion Chrome/Edge Manifest V3 extension for analyst-consented evidentiary capture.
+
+1. **Universal Real-Time Web Scraping (Headless Chromium):** Built with **Playwright Headless Browser** and specialized OSINT extractors to visit social networks in real-time, extracting live follower metrics, following counts, post volumes, biographies, and CDN profile picture URLs without requiring manual account logins.
+2. **Individual Multi-Platform Evaluation:** Dedicated, targeted search and forensic workflows for **Instagram**, **X (Twitter)**, **Telegram**, **Facebook**, **YouTube**, and **GitHub**.
+3. **Multi-Signal Machine Learning Scoring:** Calibrated **Random Forest classifier** trained on **10,594 real labelled profiles** (including the **InstaFake arXiv:1910.03090** benchmark), Devanagari Hindi/English urgency NLP, and live Google Safe Browsing v4 phishing detection.
+4. **Single-Click Legal Evidence Dossier PDF Export:** Instantly generates official **Government of India / ITBP Forensic Assessment Reports** compliant with **Section 79(3)(b) of the Information Technology Act 2000** and **Section 63 of the Bharatiya Sakshya Adhiniyam (BSA) 2023**.
+5. **No Mock Account Defaults:** Launches into a clean, operational session for cyber analysts with zero hardcoded officer mocks.
+6. **Dark Glossy Aesthetic Design System:** Ultra-modern dark cyber workstation with **Plus Jakarta Sans**, **Space Grotesk**, **JetBrains Mono**, luminous ambient aurora orbs, subtle vector matrix grid, and specular glassmorphism.
+
+---
+
+## 📸 Website Screenshots & Feature Showcase
+
+### 1. Scanned Profile Dossier & Signature Risk Dial
+Displays the evaluated target with the dedicated **Profile Card**, real profile picture loaded from live CDNs, verification badges, 4-metric telemetry grid, Google Safe Browsing pill, and the signature multi-signal risk dial.
+
+<div align="center">
+  <img src="assets/screenshots/dossier_live_assessment.png" alt="Live Scraped Assessment Dossier" width="850" style="border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 16px 50px rgba(0,0,0,0.5);" />
+  <p><i>Figure 2: Real live scrape of @cristiano on Instagram with 681,000,000 followers, verified live avatar, Google Safe Browsing status, and calibrated 0.04 LOW risk classification.</i></p>
+</div>
+
+---
+
+### 2. Multi-Platform Forensic Scanner (Individual Social Media Sections)
+Interactive platform tabs allowing analysts to switch between **Instagram**, **X (Twitter)**, **Telegram**, **Facebook**, **YouTube**, and **GitHub** with customized verification routines and targeted presets.
+
+<div align="center">
+  <img src="assets/screenshots/scanner_platform_sections.png" alt="Multi-Platform Forensic Scanner" width="850" style="border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 16px 50px rgba(0,0,0,0.5);" />
+  <p><i>Figure 3: Multi-platform search studio with platform verification checklist and evidentiary screenshot drag-and-drop.</i></p>
+</div>
+
+---
+
+### 3. Operational Overview & Nodal Command Dashboard
+Real-time telemetry showing daily scanning throughput, high-risk detection counts, 14-day detection vs takedown volume trend chart, and statutory SLA countdown timers.
+
+<div align="center">
+  <img src="assets/screenshots/operational_dashboard.png" alt="Operational Overview Dashboard" width="850" style="border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 16px 50px rgba(0,0,0,0.5);" />
+  <p><i>Figure 4: Executive dashboard tracking 14-day compliance rate (96.2%) and Section 79(3)(b) takedown enforcement.</i></p>
+</div>
+
+---
+
+### 4. Clean Assessment Launchpad (Zero Mock User by Default)
+Pristine state when no target is loaded, showing the 6 platform assessment modules and quick-launch shortcuts.
+
+<div align="center">
+  <img src="assets/screenshots/clean_launchpad.png" alt="Clean Assessment Launchpad" width="850" style="border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 16px 50px rgba(0,0,0,0.5);" />
+  <p><i>Figure 5: Clean initial state with active analyst session and modular platform cards.</i></p>
+</div>
+
+---
+
+### 5. Downloadable Legal Forensic Assessment PDF Dossier
+Single-click export of an official Government of India / ITBP evidentiary dossier complete with cryptographic SHA-256 seal, feature attribution tables, and Section 63 BSA legal declaration.
+
+<div align="center">
+  <img src="assets/screenshots/legal_dossier_pdf.png" alt="Legal Dossier PDF Preview" width="850" style="border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 16px 50px rgba(0,0,0,0.5);" />
+  <p><i>Figure 6: Official PDF assessment dossier generated dynamically via client-side jsPDF engine.</i></p>
+</div>
+
+---
+
+### 6. High-Risk Impersonator Detection & Takedown Routing
+Identifies synthetic accounts, recruitment fee scams, and malicious URLs with instant warning badges and notice drafting.
+
+<div align="center">
+  <img src="assets/screenshots/high_risk_impersonator.png" alt="High Risk Impersonator Detection" width="850" style="border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 16px 50px rgba(0,0,0,0.5);" />
+  <p><i>Figure 7: Detection of unauthorized security force impersonator with 1.00 HIGH risk score and takedown recommendation.</i></p>
+</div>
 
 ---
 
 ## 🏛️ System Architecture
 
-<div align="center">
-  <img src="assets/diagrams/d1_architecture.png" alt="ProfileGuard Full Architecture" width="850"/>
-  <p><i>Figure 1: ProfileGuard End-to-End Enterprise System Architecture</i></p>
-</div>
-
 ```mermaid
 flowchart TB
-  subgraph Ingestion ["1. Data Acquisition & Evidentiary Ingestion"]
-    EXT["Chrome / Edge MV3 Extension (Alternative 1)"]
-    TG["Telegram Bot API (@profileguard_itbp_bot)"]
-    XAPI["X (Twitter) API v2 Connectors"]
-    META["Meta Graph Discovery Connectors"]
-    MAN["Analyst Visual Inspection Input"]
+  subgraph Client ["Frontend: Cyber Command Workstation (localhost:5173)"]
+    REACT["React 18 + Vite + TypeScript"]
+    TAILWIND["Dark Glossy Aesthetic (Plus Jakarta Sans + Space Grotesk)"]
+    PROFCARD["Dedicated ProfileCard Component (Live DP + Metrics)"]
+    PDF["Client-Side Legal PDF Dossier Generator (jsPDF)"]
+    DIAL["Signature Multi-Signal Risk Dial"]
   end
 
-  subgraph MultiSignal ["2. Multi-Signal Detection Engine"]
-    FE["Feature Extraction Pipeline (9 Numerical Signals)"]
-    RF["Random Forest Classifier (8,000 Profiles, 0.9996 ROC-AUC)"]
-    NLP["Devanagari Hindi & English Threat Urgency NLP"]
-    PHASH["Perceptual Image Hash (pHash) Emblem Matcher"]
-    URLSCAN["Google Safe Browsing v4 & VirusTotal v3 Phishing Engine"]
+  subgraph API ["Backend: FastAPI Asynchronous Engine (localhost:8000)"]
+    ROUTER["/scan/profile Endpoint"]
+    RESOLVER["4-Tier LiveProfileResolver"]
   end
 
-  subgraph Arbitration ["3. Decision Matrix & Scoring"]
-    WEIGHT["Calibrated Multi-Signal Weighted Aggregator"]
-    BAND{"Risk Categorization"}
-    HIGH["HIGH RISK (Score ≥ 0.80)"]
-    MED["MEDIUM RISK (0.45 - 0.79)"]
-    LOW["LOW RISK (< 0.45)"]
+  subgraph Scrapers ["Live Telemetry & Web Extraction"]
+    PW["Playwright Headless Chromium (Instagram & X DOM)"]
+    TG_SCRAPE["Telegram Public Web DOM Scraper (t.me)"]
+    GH_API["GitHub Public REST API"]
+    INSTA["Instaloader Fallback Engine"]
   end
 
-  subgraph Action ["4. Central Nodal Cell Action & SLA"]
-    DASH["Web Cyber Console (Dark / Light Console)"]
+  subgraph AI ["Multi-Signal Threat Intelligence"]
+    RF["Random Forest Classifier (10,594 Benchmark Profiles)"]
+    NLP["Devanagari Hindi & Urgency Keyword NLP"]
+    SAFE["Google Safe Browsing v4 Threat API"]
+    GUARD["Institutional & Verified Entity Guardrails"]
+  end
+
+  subgraph Legal ["Judicial Compliance & Evidence"]
+    SLA["IT Rules 2026 Statutory SLA Clocks (3h / 36h / 7d)"]
+    HASH["SHA-256 Chained Cryptographic Ledger"]
     NOTICE["Section 79(3)(b) Sahyog Notice Generator"]
-    SLA["IT Rules 2026 Statutory Countdown Timers"]
-    PDF["ReportLab Section 65B Evidence Dossier (PDF)"]
+    BSA["Section 63 BSA 2023 Digital Evidence Declaration"]
   end
 
-  subgraph Trust ["5. Cryptographic Evidence Ledger"]
-    DB[("SQLite / PostgreSQL Database")]
-    PRISMA["Prisma ORM Schema & Studio"]
-    AUDIT["SHA-256 Hash-Chained Tamper-Evident Ledger"]
-  end
-
-  EXT & TG & XAPI & META & MAN --> FE
-  FE --> RF & NLP & PHASH & URLSCAN --> WEIGHT --> BAND
-  BAND --> HIGH & MED & LOW --> DASH
-  DASH --> NOTICE & SLA & PDF
-  NOTICE & PDF & DASH --> DB & AUDIT
-  DB -.-> PRISMA
+  REACT --> ROUTER
+  ROUTER --> RESOLVER
+  RESOLVER --> PW & TG_SCRAPE & GH_API & INSTA
+  PW & TG_SCRAPE & GH_API --> RF & NLP & SAFE & GUARD
+  RF & NLP & SAFE & GUARD --> ROUTER
+  ROUTER --> PROFCARD & DIAL & SLA & HASH
+  PROFCARD --> PDF
+  PDF --> NOTICE & BSA
 ```
 
 ---
 
-## 🧠 Multi-Signal Detection Engine
+## 🌐 4-Tier Live Telemetry Architecture
 
-<div align="center">
-  <img src="assets/diagrams/d2_pipeline.png" alt="Multi-Signal Pipeline" width="850"/>
-  <p><i>Figure 2: Multi-Signal ML, NLP, and Phishing Analysis Pipeline</i></p>
-</div>
+When an analyst scans any handle or URL worldwide, ProfileGuard resolves real-world metrics through a 4-tier pipeline:
 
-### 1. Machine Learning Classifier (Random Forest) & InstaFake Dataset Integration
-The ML engine is trained on **10,594 real-world labelled social media accounts** combined across three premier research and forensic corpuses:
-1. **InstaFake Research Dataset (arXiv:1910.03090, IEEE):** 2,594 profiles (*fake-v1.0* and *automated-v1.0*) by Fatih Cagatay Akyon & Esat Kalfaoglu, capturing sophisticated automation behavioral patterns and digit density metrics.
-2. **Kaggle Instagram Fake Profiles Corpus:** 5,000 real & fraudulent accounts.
-3. **Multi-Platform Fake Social Media Dataset:** 3,000 multi-network forensic cases.
-
-- **Model:** Tuned `RandomForestClassifier` with 200 estimators, balanced class weights, and 5-fold cross-validation.
-- **ROC-AUC Score:** **0.9991**
-- **Test Accuracy & F1-Score:** **99.00%** (2,100 / 2,119 held-out test accounts classified with zero false positives on government handles).
-- **Key Empirical Research Finding (arXiv:1910.03090):**
-  - Username digit ratio is one of the strongest discriminators: >50% of automated fake accounts contain numerals in the handle, whereas 88.9% of authentic institutional accounts have 0 digits.
-  - Follower-to-following ratio (`follow_ratio`) combined with account age accounts for >38% of total predictive weight.
-- **Core Features Evaluated:**
-  - `follow_ratio`: Ratio of followers to following ($\frac{\text{followers}}{\text{following} + 1}$).
-  - `posts_per_day`: Activity density over lifetime.
-  - `account_age_days`: Account creation date delta.
-  - `username_digit_ratio`: Proportion of numerals in handle (common in botnets).
-  - `has_profile_pic`: Binary flag for presence of avatar image.
-  - `external_url`: External hyperlink redirection presence.
-  - `bio_length`: Character length of user description.
-
-<div align="center">
-  <img src="assets/diagrams/d6_ml_results.png" alt="ML Results & Feature Importances" width="850"/>
-  <p><i>Figure 3: Machine Learning Model Metrics, Confusion Matrix & Feature Importances</i></p>
-</div>
-
-### 2. Devanagari Hindi & English Threat Urgency NLP
-Hostile campaigns targeting ITBP units commonly leverage Hindi, Devanagari script, and Hinglish. ProfileGuard scans text bodies for:
-- **Impersonation Signatures:** "आईटीबीपी", "ITBP", "आर्मी", "सेना", "Border Police", "Commando", "Officer Rajesh".
-- **Fraud & Scam Urgency Flags:** "भर्ती", "नौकरी", "urgent apply", "direct joining", "advance fee", "lottery", "confidential".
-- **Urgency Sentiment Score:** Computes threat modifier weights applied directly to the hybrid assessment score.
-
-### 3. Perceptual Image Hashing (`pHash`)
-Impersonators often download the official ITBP circular insignia or Ministry logos and apply subtle crops or compression to bypass MD5 hash filters. 
-- ProfileGuard uses **perceptual hashing (64-bit DCT)** to compute Hamming distance against the authenticated ITBP insignia library. Any distance $\le 10$ indicates logo theft with $>95\%$ confidence.
-
-### 4. Live Phishing & Threat Intelligence
-- **Google Safe Browsing v4:** Automatically probes external URLs embedded in target bios against Google's global malware and social engineering list.
-- **VirusTotal API v3:** Dispatches suspicious links to 70+ threat intelligence engines to identify malicious infrastructure.
+1. **Tier 0a — Headless Browser DOM Scraping (`web_scraper.py`):**
+   - Launches automated Chromium instance using Playwright.
+   - Extracts rendered display title, follower count, following count, media count, and bio.
+   - Downloads and verifies actual **Profile Picture (DP)** URLs directly from the platform CDN.
+   - Accurately identifies whether an account has a custom avatar (`WITH DP`) or a blank default (`NO DP`).
+2. **Tier 0b — Direct Telegram DOM Extraction:**
+   - Scrapes `https://t.me/{handle}` zero-auth public web pages for channels and groups.
+   - Extracts real subscriber counts, channel descriptions, verified indicators, and avatar images.
+3. **Tier 0c — GitHub Public REST API:**
+   - Fetches developer public telemetry (follower counts, public repos, avatar URLs).
+4. **Tier 1 — Machine Learning Classification & Safe Browsing:**
+   - Evaluates 11 tabular features using the pre-trained Random Forest model.
+   - Scans embedded links against the **Google Safe Browsing v4 Threat API**.
+   - Applies institutional guardrails to prevent false positives on recognized public figures and government agencies.
 
 ---
 
-## ⚖️ Legal Framework, Sahyog & IT Rules 2026 SLAs
+## 🚀 Quick Start Guide
 
-<div align="center">
-  <img src="assets/diagrams/d3_workflow.png" alt="Takedown Workflow" width="850"/>
-  <p><i>Figure 4: Section 79(3)(b) Sahyog Portal Takedown Lifecycle & SLA Timers</i></p>
-</div>
+### Prerequisites
+- **Python 3.11+** (Python 3.13 supported)
+- **Node.js 18+** & **npm**
+- **FFmpeg** (optional, for video processing)
 
-*Note: All legal citations and notices require nodal cell authorization (`CONFIRM WITH LEGAL`).*
+### 1. Clone & Set Up Backend
 
-### Statutory SLA Escalation Timers (IT Rules Amended 2026)
-| Trigger Type | Statutory Basis | Legal Deadline | ProfileGuard Automated Action |
-|:---|:---|:---:|:---|
-| **Government Order / Court Directive** | Rule 3(1)(d), IT Rules | **3 Hours** | Generates urgent Section 79(3)(b) notice with live 3h countdown |
-| **Urgent Public / Force Complaint** | Section 79(3)(b) IT Act | **36 Hours** | Prepares Sahyog XML/JSON dossier for I4C transmission |
-| **General Grievance Disposal** | Rule 3(2), IT Rules | **7 Days** | Enqueues for intermediary Grievance Officer review |
-| **Intimate Imagery / Identity Abuse** | Rule 3(2)(b), IT Rules | **2 Hours** | Flags high-priority alert with immediate redaction package |
-
-### Section 65B Indian Evidence Act Forensic PDF Dossier
-When a takedown case is escalated, ProfileGuard generates a court-admissible PDF dossier containing:
-- Target account handles, platform identifiers, and timestamps.
-- Raw JSON feature payload with SHA-256 digest.
-- Google Safe Browsing / VirusTotal scan results.
-- Devanagari text analysis output.
-- **Section 65B Electronic Record Certificate** signed with the investigating officer's cryptographic identity.
-
----
-
-## 🔒 Cryptographic Evidence Trail & Data Model
-
-<div align="center">
-  <img src="assets/diagrams/d5_datamodel.png" alt="Entity Relationship Data Model" width="850"/>
-  <p><i>Figure 5: Entity-Relationship Diagram & Cryptographic Hash-Chaining Scheme</i></p>
-</div>
-
-Every system event (profile scan, case creation, status change, notice generation) is appended to an immutable SHA-256 chained audit ledger:
-
-$$\text{Hash}_n = \text{SHA256}\left(\text{Hash}_{n-1} \parallel \text{Timestamp} \parallel \text{Action} \parallel \text{Actor} \parallel \text{Payload}\right)$$
-
-- **Genesis Block:** Initialized with 64 zeros (`0000000000000000000000000000000000000000000000000000000000000000`).
-- **Chain Verification:** The web console features an instant cryptographic verification button that traverses the entire chain from genesis to the head block, ensuring zero database tampering.
-
----
-
-## 🗄️ Prisma ORM & Database Layer
-
-ProfileGuard includes a complete **[prisma/schema.prisma](file:///Users/aryan/asd_major_project/cybershield/prisma/schema.prisma)** definition synchronized with the SQLite/PostgreSQL database models.
-
-```prisma
-datasource db {
-  provider = "sqlite"
-  url      = "file:../profileguard.db"
-}
-
-model UserAnalyst     { ... } // Analysts & Nodal Officers with RBAC
-model PlatformAccount { ... } // Tracked Social Media Profiles
-model Assessment      { ... } // Multi-Signal ML Scores & Signal Payloads
-model TakedownCase    { ... } // Legal Cases, Notice References & SLAs
-model Evidence        { ... } // Media Captures & Perceptual Hashes
-model AuditLog        { ... } // Cryptographically Chained SHA-256 Ledger
-```
-
-To launch the interactive **Prisma Studio** visual database browser:
 ```bash
-npx prisma studio
-```
-*(Opens at `http://localhost:5555` to browse and inspect all tables and relationships visually)*
-
----
-
-## 🖥️ Web Console & Browser Extension (Alternative 1)
-
-<div align="center">
-  <img src="assets/diagrams/d8_dashboard.png" alt="Cyber Command Console" width="850"/>
-  <p><i>Figure 6: ProfileGuard Cyber Defense Web Console & Analyst Cockpit</i></p>
-</div>
-
-### 1. Cyber Command Console (`http://localhost:8000/`)
-- **Dark / Light Mode Toggle:** Seamless 1-click theme switcher in header with state persistence in `localStorage`.
-- **Dynamic Aurora Colormix Background:** Smoothly animated floating gradient orbs (`cyan`, `violet`, `indigo`, `emerald`) with a high-tech dot matrix cyber-grid.
-- **Iridescent Spinning Logo Emblem:** Continuous 360° conic rotating border with gentle floating breathing motion and live radar beacon ping.
-- **1-Click Test Presets:** Test cases ready for demonstration:
-  - 🚨 *Fake Officer Impersonator* (`@officer_rajesh_8841`)
-  - ⚠️ *Phishing Recruitment Scam* (`@itbp_recruit_2024`)
-  - ✅ *Verified Genuine Profile* (`@priya.sharma`)
-
-### 2. Browser Extension (Alternative 1)
-Designed to inspect public profiles on Instagram, X, Facebook, and Telegram without relying on closed platform APIs:
-1. Navigate to `chrome://extensions/` in Chrome or Edge.
-2. Enable **Developer mode** (top right).
-3. Click **Load unpacked** and select the `/extension` directory.
-4. Open any profile and click **"Capture & Transmit Evidence"** in the popup to send observed metadata straight to the detection engine.
-
----
-
-## 🛠️ Tech Stack & Dependencies
-
-```
-ProfileGuard Framework
-├── Core Backend:       Python 3.11+ / 3.13, FastAPI, Uvicorn, Pydantic v2
-├── Machine Learning:   Scikit-Learn, XGBoost, NumPy, Pandas, Joblib
-├── Forensic Analytics: ImageHash, Pillow, Regex (Devanagari / Indic NLP)
-├── PDF & Legal Docs:   ReportLab (Section 65B Evidence Dossiers)
-├── Database & ORM:     SQLAlchemy, SQLite, PostgreSQL, Prisma ORM
-├── Frontend UI:        HTML5, TailwindCSS (Dark/Light), Lucide Icons, Vanilla JS
-├── Browser Extension:  Manifest V3, Chrome Extension API
-└── Threat Connectors:  Google Safe Browsing v4, VirusTotal v3, Telegram Bot API
-```
-
----
-
-## 🚀 Installation & Local Setup
-
-### 1. Clone Repository & Setup Virtual Environment
-```bash
+# Clone the repository
 git clone https://github.com/baryansagar74-create/cybershield.git
 cd cybershield
 
@@ -262,57 +199,64 @@ cd cybershield
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install all backend dependencies
+# Install backend dependencies
 pip install -r requirements.txt
-```
+pip install playwright instaloader jspdf
 
-### 2. Configure Environment Variables
-```bash
+# Install Playwright Chromium headless browser
+playwright install chromium
+
+# Copy environment template and configure keys (optional)
 cp .env.example .env
-# Edit .env with your Google Safe Browsing, VirusTotal, or Telegram keys
-```
 
-### 3. Initialize Database & Seed Synthetic Profiles
-```bash
-# Seed initial demo profiles, takedown cases, and genesis audit block
-python3 scripts/seed_synthetic.py
-```
-
-### 4. Start the ProfileGuard Server
-```bash
-# Start FastAPI backend and Web Console on port 8000
+# Run FastAPI backend server
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-- **Web Console:** Open [http://localhost:8000/](http://localhost:8000/)
-- **API Swagger Documentation:** Open [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Port 3000 Gateway:** Open [http://localhost:3000/](http://localhost:3000/)
+Backend API will be accessible at: `http://localhost:8000` (Swagger docs at `http://localhost:8000/docs`).
+
+### 2. Set Up & Run Frontend Workstation
+
+```bash
+# In a new terminal window:
+cd cybershield/dashboard
+
+# Install frontend dependencies
+npm install
+
+# Start Vite live development server
+npm run dev
+```
+
+Frontend workstation will be accessible at: `http://localhost:5173`.
 
 ---
 
-## 🧪 Automated Test Suite (100% Passing)
+## ⚙️ Environment Configuration (`.env`)
 
-Run the comprehensive pytest suite covering authentication, ML inference, NLP text processing, connectors, rate limiting, and case lifecycles:
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `GEMINI_API_KEY` | Optional Google Gemini key for OSINT threat summary overlays | `""` |
+| `GOOGLE_SAFE_BROWSING_KEY` | Google Safe Browsing v4 API key for live phishing checks | Provided / Mock |
+| `TELEGRAM_BOT_TOKEN` | Telegram Bot token for citizen grievance intake | Provided / Mock |
+| `RISK_HIGH` | Threshold for HIGH risk band | `0.80` |
+| `RISK_MEDIUM` | Threshold for MEDIUM risk band | `0.50` |
+| `DATABASE_URL` | SQLite or PostgreSQL connection string | `sqlite:///profileguard.db` |
 
-```bash
-pytest -v
-```
+---
 
-```text
-============================== test session starts ==============================
-tests/integration/test_auth_flow.py::test_register_and_login_flow PASSED     [  2%]
-tests/integration/test_case_workflow.py::test_case_lifecycle_and_sla PASSED [  4%]
-tests/integration/test_scan_flow.py::test_scan_profile_flow PASSED          [  6%]
-tests/unit/test_connectors.py (34 connector tests) PASSED                   [ 86%]
-tests/unit/test_features.py (3 feature & NLP tests) PASSED                  [ 93%]
-tests/unit/test_models.py (3 ML model tests) PASSED                         [100%]
-======================== 43 passed, 1 warning in 4.84s =========================
-```
+## ⚖️ Statutory Legal Compliance Framework
+
+ProfileGuard is structured to meet statutory requirements under Indian cyber law:
+
+1. **Section 79(3)(b) Information Technology Act 2000:** Generates structured takedown notices requiring intermediaries to expeditiously remove or disable access to unlawful content.
+2. **Rule 3(1)(d) Information Technology Rules (Amended 2026):** Enforces statutory SLA compliance windows (36-hour general takedown, 2-hour intimate imagery, 3-hour priority government order).
+3. **Section 63 Bharatiya Sakshya Adhiniyam (BSA) 2023:** Every assessment is sealed with an immutable **SHA-256 cryptographic digest** and chronological audit entry, preserving evidentiary integrity for judicial submission.
 
 ---
 
 ## 👥 Contributors & Acknowledgements
-- Developed for **Indo-Tibetan Border Police (ITBP)** & **Ministry of Home Affairs (MHA)**.
-- Compliant with **Information Technology Act, 2000 (Section 66C, 66D, 79(3)(b))**.
-- Adheres to **IT (Intermediary Guidelines) Rules, Amended 2026** and **Digital Personal Data Protection (DPDP) Act, 2023**.
-- **Dataset Citation:** Fatih Cagatay Akyon and Esat Kalfaoglu, *"Instagram Fake and Automated Account Detection"*, [arXiv:1910.03090](https://arxiv.org/abs/1910.03090), IEEE / Google Dataset Search. Licensed under CC BY-NC 4.0.
+
+- **Developed for:** Indo-Tibetan Border Police (ITBP) • Ministry of Home Affairs (MHA) Cyber Security Hackathon.
+- **Lead Developer & Designer:** [Aryan Sagar](https://github.com/baryansagar74-create)
+- **Repository:** [https://github.com/baryansagar74-create/cybershield](https://github.com/baryansagar74-create/cybershield)
