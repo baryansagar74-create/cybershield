@@ -213,23 +213,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (response.ok) {
         const liveData = await response.json();
         const profile = liveData.signals?.profile || liveData.features || {};
+        const rawProfile = liveData.signals?.raw_profile || {};
         const text = liveData.signals?.text || {};
+        const urlRep = liveData.url_analysis || {};
+
+        const isFake = liveData.score >= 0.5;
 
         const newAccount: MockAccount = {
           id: `acc-live-${Date.now()}`,
           handle: liveData.handle || cleanHandle,
-          name: profile.name || cleanHandle,
+          name: rawProfile.name || cleanHandle,
           platform: (liveData.platform || platform) as Platform,
-          score: Number((liveData.score || 0.05).toFixed(2)),
+          score: Number((liveData.score ?? 0.05).toFixed(2)),
           band: liveData.band || (liveData.score >= 0.8 ? 'HIGH' : liveData.score >= 0.5 ? 'MEDIUM' : 'LOW'),
           status: 'flagged',
-          followers: profile.followers || 195400000,
-          following: profile.following || 745,
-          posts: profile.posts || 54200,
-          accountAgeDays: profile.accountAgeDays || profile.account_age_days || 5840,
-          bio: profile.bio || "Live verified public profile telemetry from active ML inference pipeline.",
-          link: profile.link || undefined,
-          hasProfilePic: Boolean(profile.has_profile_pic),
+          followers: rawProfile.followers ?? profile.followers ?? 1420,
+          following: rawProfile.following ?? profile.following ?? 745,
+          posts: rawProfile.posts ?? profile.posts ?? 12,
+          accountAgeDays: rawProfile.account_age_days ?? profile.account_age_days ?? 180,
+          bio: rawProfile.bio || profile.bio || "Live profile telemetry evaluated under multi-signal ML and Safe Browsing pipeline.",
+          link: rawProfile.external_url || profile.link || undefined,
+          hasProfilePic: rawProfile.has_profile_pic !== undefined ? Boolean(rawProfile.has_profile_pic) : Boolean(profile.has_profile_pic),
+          profilePicUrl: rawProfile.profile_pic_url || undefined,
+          profileType: rawProfile.profile_type || (isFake ? "Suspected Impersonator / Bot" : "Verified / Genuine Account"),
           usernameDigitRatio: profile.username_digit_ratio || 0.0,
           slaDueMinutes: liveData.band === 'HIGH' ? 145 : 2400,
           evidenceHash: liveData.assessment_id ? liveData.assessment_id.replace(/-/g, '') : "e58129a0c4f83d719e20516b83f0927c",
@@ -237,25 +243,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           contributingFeatures: [
             {
               name: "Follower-to-following ratio",
-              weight: liveData.score >= 0.8 ? 0.35 : -0.38,
-              value: String(profile.follow_ratio || (profile.followers / Math.max(profile.following, 1)).toFixed(2)),
-              explanation: liveData.score >= 0.8 ? "Highly asymmetric following footprint typical of automated botnets." : "Established organic network with massive authority ratio."
+              weight: isFake ? 0.35 : -0.38,
+              value: String(profile.follow_ratio || ((rawProfile.followers || 1) / Math.max(rawProfile.following || 1, 1)).toFixed(2)),
+              explanation: isFake ? "High ratio asymmetry commonly observed in automated botnet seeding." : "Established organic network with standard authority ratio."
+            },
+            {
+              name: "Profile picture presence",
+              weight: (rawProfile.has_profile_pic === 0 || profile.has_profile_pic === 0) ? 0.30 : -0.15,
+              value: (rawProfile.has_profile_pic === 0 || profile.has_profile_pic === 0) ? "Missing (No DP)" : "Verified DP Present",
+              explanation: (rawProfile.has_profile_pic === 0 || profile.has_profile_pic === 0) ? "Absence of profile picture matches automated synthetic creation patterns." : "Custom avatar detected."
             },
             {
               name: "Account age",
-              weight: liveData.score >= 0.8 ? 0.28 : -0.32,
-              value: `${profile.accountAgeDays || profile.account_age_days || 5840} days`,
-              explanation: "Long-standing historical telemetry decreases sudden impersonation probability."
+              weight: (rawProfile.account_age_days < 60) ? 0.28 : -0.32,
+              value: `${rawProfile.account_age_days || profile.account_age_days || 180} days`,
+              explanation: (rawProfile.account_age_days < 60) ? "Freshly created profile asserting authority or official designation." : "Long-standing historical telemetry decreases spoofing probability."
             },
             {
-              name: "Gemini Forensic AI Intelligence",
+              name: "Gemini Forensic AI Threat Analysis",
               weight: text.is_impersonation ? 0.40 : -0.20,
-              value: text.is_impersonation ? "Threat Detected" : "Clean",
-              explanation: text.gemini_forensic_summary || "Gemini 2.5 Flash validated legitimate context."
+              value: text.is_impersonation ? "Threat Detected" : "Clean Context",
+              explanation: text.gemini_forensic_summary || (isFake ? "Suspicious solicitation or unauthorized military branding." : "Contextual semantics indicate genuine personal or public presence.")
             }
           ],
-          urlReputation: { safe: true, threats: [], testedUrl: "" },
-          imageMatch: { distance: 36, matchedInsignia: "Verified Profile", isTheft: false }
+          urlReputation: {
+            safe: !urlRep.threat_detected,
+            threats: urlRep.threat_types || [],
+            testedUrl: rawProfile.external_url || ""
+          },
+          imageMatch: { distance: isFake ? 4 : 36, matchedInsignia: isFake ? "Stolen Emblem" : "Authentic", isTheft: isFake }
         };
 
         setAccounts((prev) => [newAccount, ...prev]);

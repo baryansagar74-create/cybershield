@@ -141,22 +141,28 @@ export const AssessmentScreen: React.FC = () => {
 
           {/* Quick presets */}
           <button
-            onClick={() => handleLiveScan('elonmusk')}
-            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#12D8C4] transition-colors border border-white/15"
+            onClick={() => handleLiveScan('cristiano')}
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#12D8C4] transition-colors border border-white/15 cursor-pointer"
           >
-            @elonmusk
+            @cristiano
+          </button>
+          <button
+            onClick={() => handleLiveScan('nasa')}
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#34F0DB] transition-colors border border-white/15 cursor-pointer"
+          >
+            @nasa
           </button>
           <button
             onClick={() => handleLiveScan('itbp_official')}
-            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#3DDC97] transition-colors border border-white/15"
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#3DDC97] transition-colors border border-white/15 cursor-pointer"
           >
             @itbp_official
           </button>
           <button
             onClick={() => handleLiveScan('officer_rajesh_8841')}
-            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#FF3D8B] transition-colors border border-white/15"
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#FF3D8B] transition-colors border border-white/15 cursor-pointer"
           >
-            @rajesh (Fake)
+            @officer_rajesh (Fake)
           </button>
         </div>
       </div>
@@ -193,9 +199,60 @@ export const AssessmentScreen: React.FC = () => {
         
         {/* LEFT CARD (1.25fr): Profile Intelligence & Flagged Accounts Preview */}
         <div className="lg:col-span-7 glass-panel rounded-[22px] p-5 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-white/10">
-            <h3 className="text-[17px] font-bold text-white">Target Profile Intelligence</h3>
-            <span className="font-mono text-xs text-[#12D8C4] font-semibold uppercase">{account.platform} Verified</span>
+          <div className="flex items-center justify-between pb-3 border-b border-white/10">
+            <div className="flex items-center gap-3">
+              {/* Profile Picture with With/Without DP Badge */}
+              <div className="relative">
+                {account.hasProfilePic ? (
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#12D8C4] to-[#7A4DFF] p-[2px] shadow-[0_0_14px_rgba(18,216,196,0.5)]">
+                    {account.profilePicUrl ? (
+                      <img src={account.profilePicUrl} alt={account.handle} className="w-full h-full rounded-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-[#081230] flex items-center justify-center font-bold text-white text-base font-mono">
+                        {account.handle.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-[#FF3D8B] bg-[#FF3D8B]/15 flex items-center justify-center text-[#FF5C7C] font-mono text-[10px] font-bold shadow-[0_0_12px_rgba(255,61,139,0.4)]">
+                    NO DP
+                  </div>
+                )}
+                {/* DP Status Indicator Tag */}
+                <span
+                  className={clsx(
+                    "absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold border",
+                    account.hasProfilePic
+                      ? "bg-[#3DDC97] text-[#02261A] border-[#3DDC97]"
+                      : "bg-[#FF3D8B] text-white border-[#FF3D8B] animate-pulse"
+                  )}
+                >
+                  {account.hasProfilePic ? "WITH DP" : "NO DP"}
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <span>{account.name}</span>
+                  {account.hasProfilePic && (
+                    <span className="text-xs text-[#12D8C4]" title="Profile Picture Present">✓</span>
+                  )}
+                </h3>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="font-mono text-xs text-[#A9B9E0]">@{account.handle}</span>
+                  {account.profileType && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-white/10 text-[#FF9F2E] border border-white/15">
+                      {account.profileType}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-end gap-1">
+              <span className="font-mono text-xs text-[#12D8C4] font-bold uppercase">{account.platform}</span>
+              <span className="text-[10px] font-mono text-[#A9B9E0]">{account.accountAgeDays} days active</span>
+            </div>
           </div>
 
           {/* Followers / Following / Posts Counts Strip */}

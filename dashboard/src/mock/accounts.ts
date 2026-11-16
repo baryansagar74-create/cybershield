@@ -24,6 +24,8 @@ export interface MockAccount {
   bio: string;
   link?: string;
   hasProfilePic: boolean;
+  profilePicUrl?: string;
+  profileType?: string;
   usernameDigitRatio: number;
   slaDueMinutes: number; // minutes remaining for SLA
   evidenceHash: string;
