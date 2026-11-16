@@ -37,7 +37,6 @@ export const DataTable: React.FC<DataTableProps> = ({
   // J/K keyboard navigation & Enter to open
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Do not trigger if typing in an input
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) return;
 
       if (e.key === 'j' || e.key === 'ArrowDown') {
@@ -78,7 +77,6 @@ export const DataTable: React.FC<DataTableProps> = ({
 
   const handleSendToCellWithAnimation = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    // Compress row out of table (height to 0, 240ms)
     setRemovingIds((prev) => new Set(prev).add(id));
     setTimeout(() => {
       sendAccountToCell(id);
@@ -93,10 +91,10 @@ export const DataTable: React.FC<DataTableProps> = ({
   };
 
   return (
-    <div className="relative border border-line rounded-panel bg-raised overflow-hidden select-none">
+    <div className="relative glass-panel rounded-[20px] overflow-hidden select-none border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
       <div className="overflow-x-auto max-h-[580px] overflow-y-auto">
         <table className="w-full text-left border-collapse text-sm">
-          <thead className="sticky top-0 bg-sunken/90 backdrop-blur z-10 text-2xs uppercase font-mono text-txt-muted border-b border-line">
+          <thead className="sticky top-0 bg-[#081230]/90 backdrop-blur-md z-10 text-[11px] uppercase font-mono text-[#A9B9E0] border-b border-white/15">
             <tr>
               <th className="p-3 w-10 text-center">
                 <input
@@ -104,51 +102,51 @@ export const DataTable: React.FC<DataTableProps> = ({
                   aria-label="Select all rows"
                   checked={selectedIds.size > 0 && selectedIds.size === sortedAccounts.length}
                   onChange={toggleSelectAll}
-                  className="rounded-input border-line text-teal focus:ring-teal cursor-pointer"
+                  className="rounded border-white/30 text-[#12D8C4] focus:ring-[#12D8C4] cursor-pointer bg-white/10"
                 />
               </th>
-              <th className="p-3 font-medium">Target Handle & Name</th>
-              <th className="p-3 font-medium">Platform</th>
+              <th className="p-3 font-semibold text-white">Target Handle & Name</th>
+              <th className="p-3 font-semibold text-white">Platform</th>
               <th
-                className="p-3 font-medium cursor-pointer hover:text-txt"
+                className="p-3 font-semibold text-white cursor-pointer hover:text-[#12D8C4] transition-colors"
                 onClick={() => {
                   if (sortField === 'score') setSortAsc(!sortAsc);
                   else { setSortField('score'); setSortAsc(false); }
                 }}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Risk Band</span>
-                  <ArrowUpDown className="w-3 h-3" />
+                  <ArrowUpDown className="w-3.5 h-3.5 text-[#12D8C4]" />
                 </div>
               </th>
               <th
-                className="p-3 font-medium cursor-pointer hover:text-txt"
+                className="p-3 font-semibold text-white cursor-pointer hover:text-[#12D8C4] transition-colors"
                 onClick={() => {
                   if (sortField === 'followers') setSortAsc(!sortAsc);
                   else { setSortField('followers'); setSortAsc(false); }
                 }}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Followers</span>
-                  <ArrowUpDown className="w-3 h-3" />
+                  <ArrowUpDown className="w-3.5 h-3.5 text-[#12D8C4]" />
                 </div>
               </th>
               <th
-                className="p-3 font-medium cursor-pointer hover:text-txt"
+                className="p-3 font-semibold text-white cursor-pointer hover:text-[#12D8C4] transition-colors"
                 onClick={() => {
                   if (sortField === 'slaDueMinutes') setSortAsc(!sortAsc);
                   else { setSortField('slaDueMinutes'); setSortAsc(true); }
                 }}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>SLA Countdown</span>
-                  <ArrowUpDown className="w-3 h-3" />
+                  <ArrowUpDown className="w-3.5 h-3.5 text-[#12D8C4]" />
                 </div>
               </th>
-              <th className="p-3 font-medium text-right">Action</th>
+              <th className="p-3 font-semibold text-white text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-line text-xs font-sans">
+          <tbody className="divide-y divide-white/10 text-xs font-sans">
             {sortedAccounts.map((account, index) => {
               const isSelected = selectedIds.has(account.id);
               const isFocused = focusedIndex === index;
@@ -159,9 +157,13 @@ export const DataTable: React.FC<DataTableProps> = ({
                   key={account.id}
                   onClick={() => handleRowClick(account, index)}
                   className={clsx(
-                    "group transition-all cursor-pointer",
-                    isSelected ? "bg-teal/10" : isFocused ? "bg-sunken/60" : "hover:bg-sunken/30",
-                    isRemoving ? "opacity-0 h-0 overflow-hidden scale-y-0 duration-240" : "h-12 duration-90"
+                    "group transition-all duration-200 cursor-pointer",
+                    isSelected 
+                      ? "bg-[#12D8C4]/15 border-l-4 border-l-[#12D8C4]" 
+                      : isFocused 
+                        ? "bg-white/[0.09] border-l-4 border-l-[#FF3D8B]" 
+                        : "hover:bg-white/[0.06] hover:translate-x-0.5",
+                    isRemoving ? "opacity-0 h-0 overflow-hidden scale-y-0 duration-240" : "h-14 duration-120"
                   )}
                   style={{
                     transformOrigin: 'top',
@@ -176,28 +178,28 @@ export const DataTable: React.FC<DataTableProps> = ({
                       aria-label={`Select ${account.handle}`}
                       checked={isSelected}
                       onChange={() => {}}
-                      className="rounded-input border-line text-teal focus:ring-teal cursor-pointer"
+                      className="rounded border-white/30 text-[#12D8C4] focus:ring-[#12D8C4] cursor-pointer bg-white/10"
                     />
                   </td>
                   <td className="p-3">
                     <div className="flex flex-col">
-                      <span className="font-mono font-semibold text-txt group-hover:text-teal transition-colors">
+                      <span className="font-mono font-bold text-white group-hover:text-[#12D8C4] transition-colors text-sm">
                         @{account.handle}
                       </span>
-                      <span className="text-2xs text-txt-muted truncate max-w-[200px]">
+                      <span className="text-[11px] text-[#A9B9E0] truncate max-w-[220px]">
                         {account.name}
                       </span>
                     </div>
                   </td>
                   <td className="p-3">
-                    <span className="uppercase font-mono text-2xs text-txt-muted px-1.5 py-0.5 rounded-chip bg-sunken border border-line">
+                    <span className="uppercase font-mono text-[10px] text-white px-2 py-0.5 rounded-full bg-white/10 border border-white/20">
                       {account.platform}
                     </span>
                   </td>
                   <td className="p-3">
                     <RiskBadge band={account.band} score={account.score} />
                   </td>
-                  <td className="p-3 font-mono tabular-nums text-txt-muted">
+                  <td className="p-3 font-mono tabular-nums text-[#EAF1FF]">
                     {account.followers.toLocaleString()}
                   </td>
                   <td className="p-3">
@@ -233,12 +235,12 @@ export const DataTable: React.FC<DataTableProps> = ({
         </table>
       </div>
 
-      {/* Bulk action bar slides up 12px when rows selected */}
+      {/* Bulk action bar */}
       {showBulkBar && selectedIds.size > 0 && (
         <div
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-raised border border-teal shadow-2xl rounded-modal px-4 py-2.5 flex items-center gap-4 z-20 animate-in slide-in-from-bottom-3 duration-240"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 glass-panel border border-[#12D8C4] shadow-[0_12px_40px_rgba(18,216,196,0.45)] rounded-[16px] px-5 py-3 flex items-center gap-4 z-20 backdrop-blur-xl animate-in slide-in-from-bottom-3 duration-200"
         >
-          <span className="text-xs font-mono font-medium text-txt">
+          <span className="text-xs font-mono font-bold text-white">
             {selectedIds.size} target{selectedIds.size > 1 ? 's' : ''} selected
           </span>
           <div className="flex items-center gap-2">

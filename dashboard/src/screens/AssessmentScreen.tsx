@@ -80,10 +80,16 @@ export const AssessmentScreen: React.FC = () => {
               {account.band} ({account.score.toFixed(2)})
             </span>
           </div>
-          <div className="text-xs text-[#A9B9E0] mt-1 font-mono">
+          <div className="text-xs text-[#A9B9E0] mt-1 font-mono flex items-center gap-2">
             <span className="capitalize font-semibold text-white">{account.platform}</span> · 
             created {account.accountAgeDays} days ago · 
-            <span className="text-[#12D8C4] font-medium ml-1">Live Multi-Signal Inference</span>
+            <span className="inline-flex items-center gap-1.5 text-[#12D8C4] font-medium">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#12D8C4] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#12D8C4]"></span>
+              </span>
+              Live Multi-Signal Inference
+            </span>
           </div>
         </div>
 
@@ -91,14 +97,14 @@ export const AssessmentScreen: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => markAsGenuine(account.id)}
-            className="px-5 py-2.5 rounded-[14px] text-xs font-medium text-[#EAF1FF] border border-white/30 bg-gradient-to-b from-white/20 to-white/5 shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="glossy-btn px-5 py-2.5 rounded-[14px] text-xs font-medium text-[#EAF1FF] border border-white/30 bg-gradient-to-b from-white/20 to-white/5 shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
             Mark as genuine
           </button>
 
           <button
             onClick={() => setConfirmModalOpen(true)}
-            className="px-6 py-2.5 rounded-[14px] text-xs font-bold text-[#3A0618] border-0 bg-gradient-to-r from-[#FF8FB1] via-[#FF3D8B] to-[#FF9F2E] shadow-[0_10px_30px_rgba(255,61,139,0.55),inset_0_1px_0_rgba(255,255,255,0.7)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="glossy-btn px-6 py-2.5 rounded-[14px] text-xs font-bold text-[#3A0618] border-0 bg-gradient-to-r from-[#FF8FB1] via-[#FF3D8B] to-[#FF9F2E] shadow-[0_10px_30px_rgba(255,61,139,0.55),inset_0_1px_0_rgba(255,255,255,0.7)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
             Confirm as fake
           </button>
@@ -393,35 +399,45 @@ export const AssessmentScreen: React.FC = () => {
           <span className="text-white font-medium text-[11px]">Input</span>
         </div>
 
-        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#12D8C4] to-[#7A4DFF] shadow-[0_0_10px_#12D8C4]" />
+        <div className="relative flex-1 h-1.5 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#12D8C4] to-[#7A4DFF] shadow-[0_0_10px_#12D8C4] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-90 animate-[pipeline-beam_2.2s_infinite_linear]" />
+        </div>
 
         <div className="flex flex-col items-center gap-1.5">
           <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#9FFFF1,#0FA79B)] shadow-[0_0_16px_#12D8C4] flex items-center justify-center font-bold text-[#032622] text-[11px]">✓</div>
           <span className="text-white font-medium text-[11px]">Fetch</span>
         </div>
 
-        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#7A4DFF] to-[#8E6BFF] shadow-[0_0_10px_#7A4DFF]" />
+        <div className="relative flex-1 h-1.5 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#7A4DFF] to-[#8E6BFF] shadow-[0_0_10px_#7A4DFF] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-90 animate-[pipeline-beam_2.2s_infinite_linear] [animation-delay:0.3s]" />
+        </div>
 
         <div className="flex flex-col items-center gap-1.5">
           <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#CDB9FF,#6A3DEB)] shadow-[0_0_16px_#7A4DFF] flex items-center justify-center font-bold text-white text-[11px]">✓</div>
           <span className="text-white font-medium text-[11px]">Features</span>
         </div>
 
-        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#8E6BFF] to-[#FF9F2E] shadow-[0_0_10px_#FF9F2E]" />
+        <div className="relative flex-1 h-1.5 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#8E6BFF] to-[#FF9F2E] shadow-[0_0_10px_#FF9F2E] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-90 animate-[pipeline-beam_2.2s_infinite_linear] [animation-delay:0.6s]" />
+        </div>
 
         <div className="flex flex-col items-center gap-1.5">
           <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#FFE0A8,#F28C28)] shadow-[0_0_16px_#FF9F2E] flex items-center justify-center font-bold text-[#3A1D00] text-[11px]">✓</div>
           <span className="text-white font-medium text-[11px]">Score</span>
         </div>
 
-        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#FF9F2E] to-[#FF3D8B] shadow-[0_0_10px_#FF3D8B]" />
+        <div className="relative flex-1 h-1.5 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#FF9F2E] to-[#FF3D8B] shadow-[0_0_10px_#FF3D8B] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-90 animate-[pipeline-beam_2.2s_infinite_linear] [animation-delay:0.9s]" />
+        </div>
 
         <div className="flex flex-col items-center gap-1.5">
           <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#FFB3CC,#D61F6B)] shadow-[0_0_16px_#FF3D8B] flex items-center justify-center font-bold text-white text-[11px]">✓</div>
           <span className="text-white font-medium text-[11px]">Risk band</span>
         </div>
 
-        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-white/20" />
+        <div className="relative flex-1 h-1.5 mx-2 mb-4 rounded-full bg-white/20 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[pipeline-beam_2.2s_infinite_linear] [animation-delay:1.2s]" />
+        </div>
 
         <div className="flex flex-col items-center gap-1.5">
           <div className="w-7 h-7 rounded-full border-2 border-dashed border-white/60 flex items-center justify-center text-white/70 text-[10px]">●</div>

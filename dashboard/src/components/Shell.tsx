@@ -67,11 +67,11 @@ export const Shell: React.FC<ShellProps> = ({ children }) => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#060A1E] via-[#0B1340] to-[#12093A] text-[#EAF1FF] font-sans antialiased overflow-x-hidden selection:bg-[#12D8C4] selection:text-[#032622]">
-      {/* GLOSSY COLOUR MIX AMBIENT GLOW ORBS */}
-      <div className="pointer-events-none fixed left-[-120px] top-[-140px] w-[520px] h-[520px] rounded-full bg-[#12D8C4] opacity-35 blur-[110px] z-0" />
-      <div className="pointer-events-none fixed right-[-100px] top-[60px] w-[460px] h-[460px] rounded-full bg-[#FF3D8B] opacity-30 blur-[120px] z-0" />
-      <div className="pointer-events-none fixed left-[380px] bottom-[-200px] w-[560px] h-[420px] rounded-full bg-[#FF9F2E] opacity-25 blur-[120px] z-0" />
-      <div className="pointer-events-none fixed right-[220px] bottom-[-120px] w-[380px] h-[380px] rounded-full bg-[#7A4DFF] opacity-35 blur-[110px] z-0" />
+      {/* GLOSSY COLOUR MIX AMBIENT GLOW ORBS WITH LIVING ORGANIC FLOAT ANIMATION */}
+      <div className="pointer-events-none fixed left-[-120px] top-[-140px] w-[520px] h-[520px] rounded-full bg-[#12D8C4] opacity-35 blur-[110px] z-0 animate-aurora-1" />
+      <div className="pointer-events-none fixed right-[-100px] top-[60px] w-[460px] h-[460px] rounded-full bg-[#FF3D8B] opacity-30 blur-[120px] z-0 animate-aurora-2" />
+      <div className="pointer-events-none fixed left-[380px] bottom-[-200px] w-[560px] h-[420px] rounded-full bg-[#FF9F2E] opacity-25 blur-[120px] z-0 animate-aurora-3" />
+      <div className="pointer-events-none fixed right-[220px] bottom-[-120px] w-[380px] h-[380px] rounded-full bg-[#7A4DFF] opacity-35 blur-[110px] z-0 animate-aurora-1" />
 
       {/* Main Layout Container */}
       <div className="relative z-10 flex min-h-screen p-3 md:p-6 gap-5">
