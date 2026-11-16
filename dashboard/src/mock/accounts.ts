@@ -26,6 +26,7 @@ export interface MockAccount {
   hasProfilePic: boolean;
   profilePicUrl?: string;
   profileType?: string;
+  dataSource?: string; // 'live_scraped_instaloader' | 'live_scraped_playwright_instagram' | 'live_meta_httpx' | 'gemini_osint' | 'heuristic'
   usernameDigitRatio: number;
   slaDueMinutes: number; // minutes remaining for SLA
   evidenceHash: string;

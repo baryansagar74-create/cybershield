@@ -180,10 +180,10 @@ export const AssessmentScreen: React.FC = () => {
             </span>
             <div>
               <span className="text-xs font-bold text-white font-mono block">
-                Executing Live Multi-Signal OSINT Inference via Gemini & ML...
+                Visiting platform &amp; extracting live data via Playwright / Instaloader / Gemini...
               </span>
               <span className="text-[11px] text-[#A9B9E0] font-mono">
-                Extracting profile telemetry & DP • Running Google Safe Browsing • Evaluating Random Forest (10,594 benchmark)
+                Real web scrape → DP detection → Safe Browsing → Random Forest ML (10,594 benchmark)
               </span>
             </div>
           </div>
@@ -273,9 +273,36 @@ export const AssessmentScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-end gap-1">
-              <span className="font-mono text-xs text-[#12D8C4] font-bold uppercase">{account.platform}</span>
-              <span className="text-[10px] font-mono text-[#A9B9E0]">{account.accountAgeDays} days active</span>
+            <div className="flex flex-col items-end gap-1.5">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs text-[#12D8C4] font-bold uppercase">{account.platform}</span>
+                <span className="text-[10px] font-mono text-[#A9B9E0]">{account.accountAgeDays} days active</span>
+              </div>
+              {account.dataSource && (
+                <span
+                  className={clsx(
+                    "px-2.5 py-0.5 rounded-full text-[9px] font-mono font-semibold tracking-wider flex items-center gap-1.5 border",
+                    account.dataSource.includes("playwright") || account.dataSource.includes("scraped")
+                      ? "bg-[#12D8C4]/15 text-[#12D8C4] border-[#12D8C4]/40 shadow-[0_0_10px_rgba(18,216,196,0.2)]"
+                      : account.dataSource.includes("telegram") || account.dataSource.includes("github")
+                      ? "bg-[#3DDC97]/15 text-[#3DDC97] border-[#3DDC97]/40 shadow-[0_0_10px_rgba(61,220,151,0.2)]"
+                      : account.dataSource.includes("gemini")
+                      ? "bg-[#7A4DFF]/15 text-[#B692FF] border-[#7A4DFF]/40 shadow-[0_0_10px_rgba(122,77,255,0.2)]"
+                      : "bg-[#FF9F2E]/15 text-[#FFC878] border-[#FF9F2E]/40"
+                  )}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse"></span>
+                  {account.dataSource.includes("playwright")
+                    ? "Live Scraped (Web Browser)"
+                    : account.dataSource.includes("telegram")
+                    ? "Live Telegram DOM"
+                    : account.dataSource.includes("github")
+                    ? "Live GitHub API"
+                    : account.dataSource.includes("gemini")
+                    ? "OSINT Intelligence"
+                    : "Forensic Heuristic"}
+                </span>
+              )}
             </div>
           </div>
 

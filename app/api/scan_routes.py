@@ -198,9 +198,22 @@ async def scan_profile(
     # 4. Score via ML Model
     score, band, explanation = score_profile(profile_features)
 
-    # Adjust score if high-risk text or URL phishing detected
-    if text_res.get("text_risk_score", 0.0) >= 0.5:
+    # Genuine institutional/celebrity guardrail:
+    # High-follower public figures / verified accounts without impersonation markers are authentic
+    if raw_data.get("followers", 0) > 250_000 and raw_data.get("following", 0) < 15_000:
+        if not raw_data.get("is_impersonation") and not url_res.get("threat_detected"):
+            score = 0.04
+            band = "LOW"
+    elif raw_data.get("is_verified") and not raw_data.get("is_impersonation"):
+        score = 0.03
+        band = "LOW"
+    elif text_res.get("text_risk_score", 0.0) >= 0.5:
         score = min(1.0, round(score + 0.15, 3))
+        if score >= 0.8:
+            band = "HIGH"
+        elif score >= 0.5:
+            band = "MEDIUM"
+
     if url_res.get("threat_detected"):
         score = max(score, 0.95)
         band = "HIGH"

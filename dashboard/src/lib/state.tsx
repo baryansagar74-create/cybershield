@@ -244,6 +244,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           hasProfilePic: rawProfile.has_profile_pic !== undefined ? Boolean(rawProfile.has_profile_pic) : Boolean(profile.has_profile_pic),
           profilePicUrl: rawProfile.profile_pic_url || undefined,
           profileType: rawProfile.profile_type || (isFake ? "Suspected Impersonator / Bot" : "Verified / Genuine Account"),
+          dataSource: rawProfile.data_source || liveData.data_source || (rawProfile.name ? 'gemini_osint' : 'heuristic'),
           usernameDigitRatio: profile.username_digit_ratio || 0.0,
           slaDueMinutes: liveData.band === 'HIGH' ? 145 : 2400,
           evidenceHash: liveData.assessment_id ? liveData.assessment_id.replace(/-/g, '') : "e58129a0c4f83d719e20516b83f0927c",
