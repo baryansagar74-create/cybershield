@@ -1,43 +1,62 @@
-/* ProfileGuard Design System Tokens */
+/* ProfileGuard Design System Tokens — Glossy Colour Mix Standard */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Dark Theme Default */
-  --bg-base: #081A33;
-  --bg-raised: #0F2A4D;
-  --bg-sunken: #06142A;
-  --line: #1E3A63;
-  --text: #E8EEF6;
-  --text-muted: #93A4BD;
-  --brand-teal: #12A89D;
-  --brand-saffron: #F28C28;
-  --risk-high: #E5484D;
-  --risk-low: #2F9E62;
-  --evidence: #8FA3C0;
+  /* Glossy Dark Operations (Default) */
+  --bg-base: #060A1E;
+  --bg-raised: rgba(255, 255, 255, 0.08);
+  --bg-sunken: rgba(255, 255, 255, 0.04);
+  --line: rgba(255, 255, 255, 0.16);
+  --text: #EAF1FF;
+  --text-muted: #A9B9E0;
+  --brand-teal: #12D8C4;
+  --brand-saffron: #FF9F2E;
+  --risk-high: #FF3D8B;
+  --risk-low: #3DDC97;
+  --evidence: #8E6BFF;
 }
 
 html.light {
-  /* Light Theme Alternative */
-  --bg-base: #F3F6FA;
+  /* High-Contrast Light Alternative */
+  --bg-base: #F0F4FA;
   --bg-raised: #FFFFFF;
-  --bg-sunken: #E6ECF4;
-  --line: #D3DCE8;
-  --text: #0B2545;
-  --text-muted: #51627C;
-  --brand-teal: #0E8C83;
-  --brand-saffron: #C96A0C;
-  --risk-high: #C73338;
-  --risk-low: #237A4B;
-  --evidence: #51627C;
+  --bg-sunken: #E5ECF6;
+  --line: #CFDCEE;
+  --text: #060A1E;
+  --text-muted: #4F6385;
+  --brand-teal: #0FA79B;
+  --brand-saffron: #D47814;
+  --risk-high: #D81E63;
+  --risk-low: #1C8C56;
+  --evidence: #6B4EEB;
 }
 
-/* Accessibility Focus Ring: 2px teal, 2px offset */
-*:focus-visible {
-  outline: 2px solid var(--brand-teal) !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 4px rgba(18, 168, 157, 0.25) !important;
+/* Glassmorphism Surface Primitives */
+.glass-panel {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-panel-subtle {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #EAF1FF;
+}
+.glass-input:focus {
+  border-color: #12D8C4 !important;
+  box-shadow: 0 0 16px rgba(18, 216, 196, 0.4) !important;
 }
 
 /* Tabular Numerals for Monospace Data */
@@ -45,21 +64,11 @@ html.light {
   font-variant-numeric: tabular-nums;
 }
 
-/* Faint dot grid for scan page */
-.bg-dot-grid {
-  background-image: radial-gradient(rgba(147, 164, 189, 0.08) 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-
-/* Density Compact Mode overrides */
-html.density-compact td, 
-html.density-compact th {
-  padding-top: 0.375rem !important;
-  padding-bottom: 0.375rem !important;
-}
-
-html.density-compact .stat-tile {
-  padding: 0.75rem !important;
+/* Focus Ring */
+*:focus-visible {
+  outline: 2px solid #12D8C4 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(18, 216, 196, 0.35) !important;
 }
 
 /* Reduced Motion Override */
@@ -68,15 +77,5 @@ html.density-compact .stat-tile {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
-}
-
-html.reduced-motion *, 
-html.reduced-motion ::before, 
-html.reduced-motion ::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-  scroll-behavior: auto !important;
 }

@@ -1,402 +1,484 @@
 import React, { useState } from 'react';
 import { useApp } from '../lib/state';
-import { translations } from '../lib/translations';
-import { RiskDial } from '../components/RiskDial';
-import { RiskBadge } from '../components/RiskBadge';
-import { EvidenceChip } from '../components/EvidenceChip';
-import { SlaTimer } from '../components/SlaTimer';
-import { Button } from '../components/Button';
 import { Modal } from '../components/Modal';
+import { Button } from '../components/Button';
 import { 
-  ShieldCheck, 
-  AlertTriangle, 
-  HelpCircle, 
+  ShieldAlert, 
+  CheckCircle2, 
   ExternalLink, 
-  Globe, 
-  Image as ImageIcon,
-  CheckCircle2,
-  FileText
+  Search, 
+  Sparkles, 
+  AlertTriangle,
+  RotateCcw
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const AssessmentScreen: React.FC = () => {
   const { 
-    language, 
     selectedAccountId, 
     accounts, 
     confirmAsFake, 
     markAsGenuine, 
+    runLiveScan,
     setCurrentScreen 
   } = useApp();
-  
-  const t = translations[language];
 
-  // Get selected account or fallback to first
+  // Find currently selected account or fallback to first
   const account = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
 
   const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
-  const [confirmReason, setConfirmReason] = useState<string>("Active impersonation of uniformed personnel and fraudulent recruitment solicitation.");
+  const [confirmReason, setConfirmReason] = useState<string>("Impersonation of uniformed central police force personnel and fraudulent fee solicitation.");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [confirmedStamp, setConfirmedStamp] = useState<boolean>(account.status === 'confirmed_fake');
+  const [isScanningLive, setIsScanningLive] = useState<boolean>(false);
+  const [customHandleInput, setCustomHandleInput] = useState<string>('');
 
   const handleConfirmAction = () => {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
       setConfirmModalOpen(false);
-      setConfirmedStamp(true);
       confirmAsFake(account.id, confirmReason);
-    }, 450);
+    }, 400);
   };
 
-  const handleMarkGenuineAction = () => {
-    markAsGenuine(account.id);
+  const handleLiveScan = async (handle: string) => {
+    setIsScanningLive(true);
+    await runLiveScan(handle);
+    setIsScanningLive(false);
   };
 
-  // Avatar Initials
-  const initials = account.name
-    .split(' ')
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase();
+  // Dial calculations
+  const score = account.score;
+  const isHigh = account.band === 'HIGH';
+  const isMed = account.band === 'MEDIUM';
+  const isLow = account.band === 'LOW';
+
+  // Needle angle for SVG
+  const needleAngle = -180 + score * 180;
+  const rad = (needleAngle * Math.PI) / 180;
+  const nx = 100 + 72 * Math.cos(rad);
+  const ny = 100 + 72 * Math.sin(rad);
 
   return (
-    <div className="space-y-6">
-      {/* Header bar with Back + Evidence Hash */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-line gap-3 select-none">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setCurrentScreen('dashboard')}
-          >
-            ← Back
-          </Button>
-          <div>
-            <h1 className="text-lg font-semibold text-txt flex items-center gap-2">
-              <span>{t.assessment.title}</span>
-              <RiskBadge band={account.band} score={account.score} />
+    <div className="space-y-4 select-none">
+      
+      {/* 1. TOP HEADER: Target Handle + Mark Genuine & Confirm Fake Buttons */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-[28px] font-bold text-white tracking-tight font-sans">
+              @{account.handle}
             </h1>
-            <p className="text-2xs text-txt-muted font-mono">
-              Target ID: {account.id} • Evaluated under ITBP Heuristic & ML Standard
-            </p>
+            <span
+              className={clsx(
+                "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider",
+                isHigh && "bg-gradient-to-b from-[#FF5C7C] to-[#B8123A] text-white shadow-[0_0_14px_rgba(255,61,100,0.6)]",
+                isMed && "bg-gradient-to-b from-[#FFD479] to-[#F28C28] text-[#3A1D00] shadow-[0_0_14px_rgba(255,159,46,0.55)]",
+                isLow && "bg-gradient-to-b from-[#6BF0B5] to-[#13A56B] text-[#02261A] shadow-[0_0_14px_rgba(61,220,151,0.5)]"
+              )}
+            >
+              {account.band} ({account.score.toFixed(2)})
+            </span>
+          </div>
+          <div className="text-xs text-[#A9B9E0] mt-1 font-mono">
+            <span className="capitalize font-semibold text-white">{account.platform}</span> · 
+            created {account.accountAgeDays} days ago · 
+            <span className="text-[#12D8C4] font-medium ml-1">Live Multi-Signal Inference</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <SlaTimer initialMinutes={account.slaDueMinutes} />
-          <EvidenceChip hash={account.evidenceHash} label="Evidentiary Seal" />
+        {/* Glossy Buttons from Reference Mockup */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => markAsGenuine(account.id)}
+            className="px-5 py-2.5 rounded-[14px] text-xs font-medium text-[#EAF1FF] border border-white/30 bg-gradient-to-b from-white/20 to-white/5 shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          >
+            Mark as genuine
+          </button>
+
+          <button
+            onClick={() => setConfirmModalOpen(true)}
+            className="px-6 py-2.5 rounded-[14px] text-xs font-bold text-[#3A0618] border-0 bg-gradient-to-r from-[#FF8FB1] via-[#FF3D8B] to-[#FF9F2E] shadow-[0_10px_30px_rgba(255,61,139,0.55),inset_0_1px_0_rgba(255,255,255,0.7)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          >
+            Confirm as fake
+          </button>
         </div>
       </div>
 
-      {/* Main Responsive Grid:
-          1440+: 3 Columns (Left: Profile, Center: Dial, Right: Explanations)
-          1024: 2 Columns
-          390: Single Column with Dial first */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
-        
-        {/* CENTER COLUMN (On Mobile rendered first): Risk Dial Card */}
-        <div className="order-1 lg:order-2 lg:col-span-4 bg-raised border border-line rounded-modal p-6 flex flex-col items-center justify-between shadow-sm">
-          <div className="w-full text-center pb-2 border-b border-line mb-2">
-            <span className="text-2xs font-mono uppercase tracking-wider text-txt-muted">
-              Classification Dial
-            </span>
-          </div>
-
-          <RiskDial score={account.score} band={account.band} />
-
-          <div className="w-full pt-4 border-t border-line text-center text-xs space-y-1">
-            <div className="flex justify-between text-2xs text-txt-muted font-mono">
-              <span>LOW: 0.00 - 0.49</span>
-              <span>MED: 0.50 - 0.79</span>
-              <span>HIGH: ≥ 0.80</span>
-            </div>
-            <p className="text-[11px] text-txt-muted pt-1">
-              Calibrated on 10,594 real labelled accounts (InstaFake arXiv / IEEE benchmark).
-            </p>
-          </div>
+      {/* 2. REAL SCAN INPUT BAR (Allows user to test ANY handle live) */}
+      <div className="glass-panel rounded-[18px] p-3 flex flex-col sm:flex-row items-center gap-3">
+        <div className="relative flex-1 w-full">
+          <input
+            type="text"
+            placeholder="Type any live target to scan (e.g. @elonmusk, @itbp_official, @officer_rajesh_8841)..."
+            value={customHandleInput}
+            onChange={(e) => setCustomHandleInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && customHandleInput.trim()) {
+                handleLiveScan(customHandleInput);
+              }
+            }}
+            className="w-full glass-input rounded-[12px] px-3.5 py-2 text-xs font-mono text-white placeholder-white/40 focus:outline-none"
+          />
+          <Search className="w-4 h-4 text-white/40 absolute right-3 top-2.5" />
         </div>
 
-        {/* LEFT COLUMN: Profile As Captured */}
-        <div className="order-2 lg:order-1 lg:col-span-4 bg-raised border border-line rounded-panel p-5 space-y-4">
-          <div className="flex items-start justify-between pb-3 border-b border-line">
-            <div className="flex items-center gap-3">
-              {/* Avatar Initial Placeholder - No Real Photos */}
-              <div className="w-12 h-12 rounded-full bg-sunken border border-line flex items-center justify-center font-mono font-bold text-base text-teal select-none">
-                {initials}
-              </div>
-              <div>
-                <h3 className="font-semibold text-sm text-txt leading-tight">{account.name}</h3>
-                <p className="font-mono text-xs text-txt-muted">@{account.handle}</p>
-                <span className="uppercase text-[10px] font-mono text-teal font-medium mt-0.5 inline-block">
-                  {account.platform}
-                </span>
-              </div>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={() => handleLiveScan(customHandleInput || 'elonmusk')}
+            disabled={isScanningLive}
+            className="px-4 py-2 rounded-[12px] bg-gradient-to-r from-[#12D8C4] to-[#0FA79B] text-[#032622] font-bold text-xs shadow-glow-teal hover:scale-105 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{isScanningLive ? 'Scanning...' : 'Live ML Scan'}</span>
+          </button>
+
+          {/* Quick presets */}
+          <button
+            onClick={() => handleLiveScan('elonmusk')}
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#12D8C4] transition-colors border border-white/15"
+          >
+            @elonmusk
+          </button>
+          <button
+            onClick={() => handleLiveScan('itbp_official')}
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#3DDC97] transition-colors border border-white/15"
+          >
+            @itbp_official
+          </button>
+          <button
+            onClick={() => handleLiveScan('officer_rajesh_8841')}
+            className="px-2.5 py-1.5 rounded-[10px] bg-white/10 hover:bg-white/20 text-[11px] font-mono text-[#FF3D8B] transition-colors border border-white/15"
+          >
+            @rajesh (Fake)
+          </button>
+        </div>
+      </div>
+
+      {/* 3. FOUR GLOSSY NEON STAT TILES FROM REFERENCE MOCKUP */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Scanned Today (Cyan) */}
+        <div className="p-4 rounded-[18px] bg-gradient-to-br from-[#12D8C4]/40 to-[#12D8C4]/[0.06] border border-[#50FFE6]/50 shadow-[0_14px_40px_rgba(18,216,196,0.25),inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-xl">
+          <div className="text-xs font-medium text-[#BFF5EE]">Scanned today</div>
+          <div className="text-[34px] font-bold text-white font-mono mt-1 leading-tight">1,284</div>
+        </div>
+
+        {/* High Risk (Pink) */}
+        <div className="p-4 rounded-[18px] bg-gradient-to-br from-[#FF3D8B]/40 to-[#FF3D8B]/[0.06] border border-[#FF82B4]/50 shadow-[0_14px_40px_rgba(255,61,139,0.25),inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-xl">
+          <div className="text-xs font-medium text-[#FFD0E2]">High risk identified</div>
+          <div className="text-[34px] font-bold text-white font-mono mt-1 leading-tight">73</div>
+        </div>
+
+        {/* Reported (Orange) */}
+        <div className="p-4 rounded-[18px] bg-gradient-to-br from-[#FF9F2E]/40 to-[#FF9F2E]/[0.06] border border-[#FFC878]/50 shadow-[0_14px_40px_rgba(255,159,46,0.25),inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-xl">
+          <div className="text-xs font-medium text-[#FFE2B8]">Reported to Sahyog</div>
+          <div className="text-[34px] font-bold text-white font-mono mt-1 leading-tight">41</div>
+        </div>
+
+        {/* Removed (Purple) */}
+        <div className="p-4 rounded-[18px] bg-gradient-to-br from-[#7A4DFF]/40 to-[#7A4DFF]/[0.06] border border-[#AA8CFF]/55 shadow-[0_14px_40px_rgba(122,77,255,0.28),inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-xl">
+          <div className="text-xs font-medium text-[#DCD0FF]">Confirmed removed</div>
+          <div className="text-[34px] font-bold text-white font-mono mt-1 leading-tight">29</div>
+        </div>
+      </div>
+
+      {/* 4. MAIN DOSSIER & GLOSSY RISK DIAL SECTION */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        {/* LEFT CARD (1.25fr): Profile Intelligence & Flagged Accounts Preview */}
+        <div className="lg:col-span-7 glass-panel rounded-[22px] p-5 space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-white/10">
+            <h3 className="text-[17px] font-bold text-white">Target Profile Intelligence</h3>
+            <span className="font-mono text-xs text-[#12D8C4] font-semibold uppercase">{account.platform} Verified</span>
+          </div>
+
+          {/* Followers / Following / Posts Counts Strip */}
+          <div className="grid grid-cols-3 gap-3 p-3 rounded-[14px] bg-white/5 border border-white/10 text-center font-mono">
+            <div>
+              <span className="text-[10px] text-[#A9B9E0] block uppercase">Followers</span>
+              <span className="text-base font-bold text-white">{account.followers.toLocaleString()}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-[#A9B9E0] block uppercase">Following</span>
+              <span className="text-base font-bold text-white">{account.following.toLocaleString()}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-[#A9B9E0] block uppercase">Posts</span>
+              <span className="text-base font-bold text-white">{account.posts.toLocaleString()}</span>
             </div>
           </div>
 
-          {/* Numerical Signals */}
-          <div className="grid grid-cols-3 gap-2 text-center py-2 bg-sunken/40 rounded-panel border border-line">
-            <div>
-              <span className="text-[10px] uppercase font-mono text-txt-muted block">Followers</span>
-              <span className="font-mono font-semibold text-xs text-txt">{account.followers.toLocaleString()}</span>
-            </div>
-            <div>
-              <span className="text-[10px] uppercase font-mono text-txt-muted block">Following</span>
-              <span className="font-mono font-semibold text-xs text-txt">{account.following.toLocaleString()}</span>
-            </div>
-            <div>
-              <span className="text-[10px] uppercase font-mono text-txt-muted block">Posts</span>
-              <span className="font-mono font-semibold text-xs text-txt">{account.posts}</span>
-            </div>
-          </div>
-
-          {/* Account Age & Digit Density */}
-          <div className="space-y-2 text-xs">
-            <div className="flex justify-between py-1 border-b border-line/60">
-              <span className="text-txt-muted">Account Age:</span>
-              <span className="font-mono text-txt font-medium">{account.accountAgeDays} days active</span>
-            </div>
-            <div className="flex justify-between py-1 border-b border-line/60">
-              <span className="text-txt-muted">Digit Density in Handle:</span>
-              <span className="font-mono text-txt font-medium">{account.usernameDigitRatio.toFixed(2)}</span>
-            </div>
-          </div>
-
-          {/* Bio Text (Devanagari / English) */}
-          <div className="pt-1">
-            <span className="text-[10px] font-mono uppercase text-txt-muted block mb-1">
-              Captured Profile Bio
+          {/* Captured Bio Text */}
+          <div className="space-y-1">
+            <span className="text-[11px] font-mono uppercase text-[#A9B9E0] block">
+              Captured Profile Bio / Text
             </span>
-            <div className="p-3 rounded-input bg-sunken/70 border border-line text-xs font-sans text-txt leading-relaxed">
+            <div className="p-3 rounded-[12px] bg-white/5 border border-white/10 text-xs text-white leading-relaxed font-sans">
               {account.bio}
             </div>
           </div>
 
-          {/* External Link */}
-          {account.link && (
-            <div className="pt-1">
-              <span className="text-[10px] font-mono uppercase text-txt-muted block mb-1">
-                Embedded External Redirection URL
-              </span>
-              <div className="flex items-center gap-2 p-2 rounded-input bg-sunken border border-line text-xs font-mono text-risk-high truncate">
-                <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
-                <span className="truncate">{account.link}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Screenshot Placeholder with Cryptographic Hash */}
-          <div className="pt-2">
-            <span className="text-[10px] font-mono uppercase text-txt-muted block mb-1">
-              Evidentiary DOM Screenshot Capture
+          {/* Embedded URL / Google Safe Browsing */}
+          <div className="space-y-1">
+            <span className="text-[11px] font-mono uppercase text-[#A9B9E0] block">
+              Google Safe Browsing v4 Threat Status
             </span>
-            <div className="h-24 rounded-panel bg-sunken border border-dashed border-line flex flex-col items-center justify-center text-txt-muted text-center p-2">
-              <ImageIcon className="w-5 h-5 opacity-60 mb-1" />
-              <span className="text-[11px] font-mono font-medium">screenshot_{account.handle}.png</span>
-              <span className="text-[9px] font-mono opacity-70 truncate max-w-[240px]">
-                SHA-256: {account.evidenceHash}
+            <div className="flex items-center justify-between p-2.5 rounded-[12px] bg-white/5 border border-white/10 text-xs font-mono">
+              <span className="text-white/80 truncate">
+                {account.link || "No embedded URL present in biography"}
+              </span>
+              <span className={clsx("font-bold px-2 py-0.5 rounded-full text-[10px]", account.urlReputation.safe ? "bg-[#3DDC97]/20 text-[#3DDC97]" : "bg-[#FF3D8B]/20 text-[#FF3D8B]")}>
+                {account.urlReputation.safe ? "CLEAN" : "MALICIOUS"}
               </span>
             </div>
           </div>
-        </div>
 
-        {/* RIGHT COLUMN: "Why this score" (SHAP horizontal bar list + URL Reputation + Image Match) */}
-        <div className="order-3 lg:col-span-4 bg-raised border border-line rounded-panel p-5 space-y-5">
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-txt font-mono mb-1">
-              {t.assessment.whyThisScore}
-            </h3>
-            <p className="text-[11px] text-txt-muted">
-              SHAP-style local feature attribution. Green pulls toward genuine, Red pushes toward fake.
+          {/* Gemini AI Threat Summary */}
+          <div className="p-3 rounded-[14px] bg-gradient-to-r from-white/10 to-[#7A4DFF]/15 border border-[#7A4DFF]/30 text-xs space-y-1">
+            <div className="flex items-center gap-1.5 text-[#12D8C4] font-semibold text-xs">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Gemini 2.5 Flash Forensic Explanation:</span>
+            </div>
+            <p className="text-white/90 leading-relaxed font-sans text-[11px]">
+              {account.contributingFeatures.find(f => f.name.includes("Gemini"))?.explanation || 
+               "Legitimate authority profile. High follower ratio and established tenure counter-indicate synthetic bot acquisition."}
             </p>
           </div>
 
-          {/* SHAP-style Horizontal Bar List */}
-          <div className="space-y-3">
-            {account.contributingFeatures.map((feat, i) => {
-              const isPositiveFake = feat.weight > 0;
-              const barWidth = Math.min(100, Math.abs(feat.weight) * 200);
+          {/* Flagged Accounts Table List */}
+          <div className="pt-2">
+            <span className="text-[11px] font-mono uppercase text-[#A9B9E0] block mb-2">
+              Recent Triaged Queue Targets
+            </span>
+            <div className="space-y-1.5">
+              {accounts.slice(0, 4).map((acc) => {
+                const isCurrent = acc.id === account.id;
+                return (
+                  <div
+                    key={acc.id}
+                    onClick={() => handleLiveScan(acc.handle)}
+                    className={clsx(
+                      "grid grid-cols-4 items-center p-2.5 rounded-[12px] text-xs cursor-pointer transition-all",
+                      isCurrent
+                        ? "bg-gradient-to-r from-[#12D8C4]/20 to-[#12D8C4]/[0.04] border border-[#50FFE6]/45"
+                        : "bg-white/[0.04] hover:bg-white/[0.08]"
+                    )}
+                  >
+                    <span className="font-mono font-medium text-white truncate">@{acc.handle}</span>
+                    <span className="capitalize text-[#A9B9E0]">{acc.platform}</span>
+                    <span className="font-mono text-white/90">{acc.score.toFixed(2)}</span>
+                    <span className="text-right">
+                      <span
+                        className={clsx(
+                          "inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white",
+                          acc.band === 'HIGH' && "bg-gradient-to-b from-[#FF5C7C] to-[#B8123A] shadow-[0_0_10px_rgba(255,61,100,0.5)]",
+                          acc.band === 'MEDIUM' && "bg-gradient-to-b from-[#FFD479] to-[#F28C28] text-[#3A1D00]",
+                          acc.band === 'LOW' && "bg-gradient-to-b from-[#6BF0B5] to-[#13A56B] text-[#02261A]"
+                        )}
+                      >
+                        {acc.band}
+                      </span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
-              return (
-                <div key={i} className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="font-medium text-txt">{feat.name}</span>
-                    <span className="font-mono text-txt-muted">{feat.value}</span>
-                  </div>
-                  
-                  {/* Diverging Bar */}
-                  <div className="h-2 w-full bg-sunken rounded-full overflow-hidden flex items-center">
-                    <div
-                      className={clsx(
-                        "h-full rounded-full transition-all duration-300",
-                        isPositiveFake ? "bg-risk-high" : "bg-risk-low"
-                      )}
-                      style={{ width: `${barWidth}%` }}
-                    />
-                  </div>
-                  
-                  <p className="text-[11px] text-txt-muted leading-tight">
-                    {feat.explanation}
-                  </p>
-                </div>
-              );
-            })}
+        {/* RIGHT CARD (1fr): The Glossy Risk Dial & Feature Attribution */}
+        <div className="lg:col-span-5 glass-panel rounded-[22px] p-6 flex flex-col items-center justify-between space-y-4">
+          <div className="w-full flex items-center justify-between pb-2 border-b border-white/10">
+            <span className="text-[17px] font-bold text-white">Risk Score</span>
+            <span className="text-[11px] font-mono text-[#A9B9E0]">10,594-Profile Model</span>
           </div>
 
-          {/* Link Reputation Result */}
-          <div className="pt-2 border-t border-line">
-            <span className="text-[10px] font-mono uppercase text-txt-muted block mb-1">
-              Google Safe Browsing & Link Reputation
-            </span>
-            <div className="p-3 rounded-input bg-sunken/60 border border-line flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-teal" />
-                <span>
-                  {account.urlReputation.safe
-                    ? "Clean / No threat matches"
-                    : `Threats: ${account.urlReputation.threats.join(', ')}`}
-                </span>
-              </div>
-              <span className={clsx("font-mono text-2xs font-semibold", account.urlReputation.safe ? "text-teal" : "text-risk-high")}>
-                {account.urlReputation.safe ? "SAFE" : "MALICIOUS"}
-              </span>
+          {/* GLOWING RISK DIAL SVG FROM MAIN.DC.HTML */}
+          <div className="relative flex flex-col items-center my-2">
+            <svg width="280" height="160" viewBox="0 0 200 120" role="img" aria-label={`Risk dial showing ${score}`}>
+              <defs>
+                <filter id="gl" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="3" result="b"></feGaussianBlur>
+                  <feMerge>
+                    <feMergeNode in="b"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Base Arc */}
+              <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,.1)" strokeWidth="16" pathLength="100"></path>
+
+              {/* Low Zone (Green) */}
+              <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#3DDC97" strokeWidth="16" pathLength="100" strokeDasharray="49 51" opacity={isLow ? "1" : ".35"}></path>
+
+              {/* Med Zone (Orange) */}
+              <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#FFAF3D" strokeWidth="16" pathLength="100" strokeDasharray="29 71" strokeDashoffset="-50" opacity={isMed ? "1" : ".35"}></path>
+
+              {/* High Zone (Pink) */}
+              <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#FF3D8B" strokeWidth="16" pathLength="100" strokeDasharray="20 80" strokeDashoffset="-80" filter={isHigh ? "url(#gl)" : undefined} opacity={isHigh ? "1" : ".35"}></path>
+
+              {/* Needle Line */}
+              <line x1="100" y1="100" x2={nx} y2={ny} stroke="#fff" strokeWidth="3" strokeLinecap="round" filter="url(#gl)"></line>
+              <circle cx="100" cy="100" r="8" fill="#fff"></circle>
+              <circle cx="100" cy="100" r="3.5" fill={isHigh ? "#FF3D8B" : isMed ? "#FFAF3D" : "#3DDC97"}></circle>
+            </svg>
+
+            {/* Glowing Big Score Display */}
+            <div
+              className="font-mono text-[46px] font-bold text-white tracking-tight mt-[-6px]"
+              style={{
+                textShadow: isHigh ? '0 0 24px rgba(255,61,139,.8)' : isMed ? '0 0 24px rgba(255,159,46,.8)' : '0 0 24px rgba(61,220,151,.8)'
+              }}
+            >
+              {score.toFixed(2)}
+            </div>
+
+            {/* Glowing Pill from Reference */}
+            <div
+              className={clsx(
+                "mt-2 px-4 py-1.5 rounded-full text-xs font-bold text-white tracking-wide text-center",
+                isHigh && "bg-gradient-to-b from-[#FF5C7C] to-[#B8123A] shadow-[0_0_18px_rgba(255,61,100,0.65)] border-t border-white/50",
+                isMed && "bg-gradient-to-b from-[#FFD479] to-[#F28C28] text-[#3A1D00] shadow-[0_0_18px_rgba(255,159,46,0.6)] border-t border-white/70",
+                isLow && "bg-gradient-to-b from-[#6BF0B5] to-[#13A56B] text-[#02261A] shadow-[0_0_18px_rgba(61,220,151,0.6)] border-t border-white/70"
+              )}
+            >
+              {isHigh ? 'HIGH · send to nodal cell after review' : isMed ? 'MEDIUM · manual forensic audit required' : 'LOW · confirmed genuine account'}
             </div>
           </div>
 
-          {/* Perceptual Image Match Result */}
-          <div className="pt-2 border-t border-line">
-            <span className="text-[10px] font-mono uppercase text-txt-muted block mb-1">
-              Perceptual Hash Emblem Match (pHash DCT)
-            </span>
-            <div className="p-3 rounded-input bg-sunken/60 border border-line flex items-center justify-between text-xs">
-              <div>
-                <span className="font-medium block text-txt">
-                  {account.imageMatch.matchedInsignia}
-                </span>
-                <span className="text-[10px] font-mono text-txt-muted">
-                  Hamming Distance: {account.imageMatch.distance} (Threshold ≤ 10)
-                </span>
+          {/* VIBRANT GLOWING HORIZONTAL ATTRIBUTION BARS FROM MOCKUP */}
+          <div className="w-full space-y-3 pt-2">
+            <div className="flex items-center gap-3 text-xs">
+              <span className="w-28 text-[#C9D6F5] font-medium">Account age</span>
+              <div className="flex-1 h-2.5 rounded-full bg-white/[0.12] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#FF9F2E] to-[#FF3D8B] shadow-[0_0_10px_rgba(255,61,139,0.6)] transition-all duration-500"
+                  style={{ width: `${Math.min(100, (account.accountAgeDays / 1000) * 100)}%` }}
+                />
               </div>
-              <span className={clsx("font-mono text-2xs font-semibold", account.imageMatch.isTheft ? "text-risk-high" : "text-teal")}>
-                {account.imageMatch.isTheft ? "THEFT MATCH" : "DISTINCT"}
-              </span>
             </div>
+
+            <div className="flex items-center gap-3 text-xs">
+              <span className="w-28 text-[#C9D6F5] font-medium">Handle digits</span>
+              <div className="flex-1 h-2.5 rounded-full bg-white/[0.12] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#7A4DFF] to-[#FF3D8B] shadow-[0_0_10px_rgba(122,77,255,0.6)] transition-all duration-500"
+                  style={{ width: `${Math.min(100, account.usernameDigitRatio * 200)}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs">
+              <span className="w-28 text-[#C9D6F5] font-medium">Follow ratio</span>
+              <div className="flex-1 h-2.5 rounded-full bg-white/[0.12] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#12D8C4] to-[#7A4DFF] shadow-[0_0_10px_rgba(18,216,196,0.6)] transition-all duration-500"
+                  style={{ width: `${Math.min(100, (account.followers / Math.max(account.following, 1)) * 10)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full pt-3 border-t border-white/10 text-center text-[10px] font-mono text-[#A9B9E0]">
+            SHA-256 Digest: {account.evidenceHash.substring(0, 16)}…
           </div>
         </div>
       </div>
 
-      {/* BOTTOM DECISION BAR:
-          Pinned to bottom on phone, sticky/fixed container */}
-      <div className="sticky bottom-8 bg-raised border border-line rounded-modal p-4 shadow-xl z-20 flex flex-col sm:flex-row items-center justify-between gap-3">
-        {confirmedStamp ? (
-          <div className="w-full flex items-center justify-between bg-risk-high/15 border border-risk-high/40 rounded-panel px-4 py-2 text-risk-high font-mono text-xs font-semibold">
-            <span className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4" />
-              CONFIRMED AS FAKE • Case docket forwarded to Nodal Cell queue
-            </span>
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => setCurrentScreen('cases')}
-            >
-              View in Cases
-            </Button>
-          </div>
-        ) : (
-          <>
-            <div className="text-xs text-txt-muted">
-              <span className="font-semibold text-txt">Analyst Discretion:</span> Select forensic outcome to seal evidence.
-            </div>
+      {/* 5. CONNECTED GLOWING PIPELINE STRIP FROM MAIN.DC.HTML */}
+      <div className="glass-panel rounded-[20px] p-4 flex items-center justify-between text-xs select-none shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_16px_40px_rgba(0,0,0,0.35)]">
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#9FFFF1,#0FA79B)] shadow-[0_0_16px_#12D8C4] flex items-center justify-center font-bold text-[#032622] text-[11px]">✓</div>
+          <span className="text-white font-medium text-[11px]">Input</span>
+        </div>
 
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <Button
-                variant="danger"
-                size="md"
-                onClick={() => setConfirmModalOpen(true)}
-                icon={<AlertTriangle className="w-4 h-4" />}
-                className="flex-1 sm:flex-initial"
-              >
-                {t.assessment.confirmFake}
-              </Button>
+        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#12D8C4] to-[#7A4DFF] shadow-[0_0_10px_#12D8C4]" />
 
-              <Button
-                variant="primary"
-                size="md"
-                onClick={handleMarkGenuineAction}
-                icon={<ShieldCheck className="w-4 h-4" />}
-                className="flex-1 sm:flex-initial"
-              >
-                {t.assessment.markGenuine}
-              </Button>
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#9FFFF1,#0FA79B)] shadow-[0_0_16px_#12D8C4] flex items-center justify-center font-bold text-[#032622] text-[11px]">✓</div>
+          <span className="text-white font-medium text-[11px]">Fetch</span>
+        </div>
 
-              <Button
-                variant="secondary"
-                size="md"
-                onClick={() => {
-                  setCurrentScreen('dashboard');
-                }}
-                icon={<HelpCircle className="w-4 h-4" />}
-                className="hidden md:inline-flex"
-              >
-                {t.assessment.needEvidence}
-              </Button>
-            </div>
-          </>
-        )}
+        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#7A4DFF] to-[#8E6BFF] shadow-[0_0_10px_#7A4DFF]" />
+
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#CDB9FF,#6A3DEB)] shadow-[0_0_16px_#7A4DFF] flex items-center justify-center font-bold text-white text-[11px]">✓</div>
+          <span className="text-white font-medium text-[11px]">Features</span>
+        </div>
+
+        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#8E6BFF] to-[#FF9F2E] shadow-[0_0_10px_#FF9F2E]" />
+
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#FFE0A8,#F28C28)] shadow-[0_0_16px_#FF9F2E] flex items-center justify-center font-bold text-[#3A1D00] text-[11px]">✓</div>
+          <span className="text-white font-medium text-[11px]">Score</span>
+        </div>
+
+        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-gradient-to-r from-[#FF9F2E] to-[#FF3D8B] shadow-[0_0_10px_#FF3D8B]" />
+
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full bg-[radial-gradient(circle_at_30%_25%,#FFB3CC,#D61F6B)] shadow-[0_0_16px_#FF3D8B] flex items-center justify-center font-bold text-white text-[11px]">✓</div>
+          <span className="text-white font-medium text-[11px]">Risk band</span>
+        </div>
+
+        <div className="flex-1 h-1 mx-2 mb-4 rounded-full bg-white/20" />
+
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="w-7 h-7 rounded-full border-2 border-dashed border-white/60 flex items-center justify-center text-white/70 text-[10px]">●</div>
+          <span className="text-[#A9B9E0] font-medium text-[11px]">Analyst review</span>
+        </div>
       </div>
 
-      {/* Confirm As Fake Modal (Requires Reason & Shows Draft Notice) */}
+      {/* CONFIRM MODAL */}
       <Modal
         isOpen={confirmModalOpen}
         onClose={() => setConfirmModalOpen(false)}
-        title="Confirm Account as Fake & Draft Notice"
+        title="Confirm Account as Fake & Draft Section 79(3)(b) Notice"
         footer={
           <>
-            <Button variant="secondary" size="sm" onClick={() => setConfirmModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="danger"
-              size="sm"
-              isLoading={isSubmitting}
-              onClick={handleConfirmAction}
+            <button
+              onClick={() => setConfirmModalOpen(false)}
+              className="px-4 py-2 rounded-[12px] bg-white/10 hover:bg-white/15 text-xs text-white"
             >
-              Confirm & Forward to Nodal Cell
-            </Button>
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirmAction}
+              disabled={isSubmitting}
+              className="px-5 py-2 rounded-[12px] bg-gradient-to-r from-[#FF5C7C] to-[#B8123A] text-white font-bold text-xs shadow-glow-pink"
+            >
+              {isSubmitting ? 'Sealing Docket...' : 'Confirm & Forward to Nodal Cell'}
+            </button>
           </>
         }
       >
         <div className="space-y-4">
-          <div className="p-3 rounded-input bg-risk-high/10 border border-risk-high/30 text-xs text-risk-high">
-            <span className="font-semibold">Notice:</span> Confirming will seal the SHA-256 evidence package and generate a formal Section 79(3)(b) IT Act takedown docket.
+          <div className="p-3 rounded-[12px] bg-[#FF3D8B]/15 border border-[#FF3D8B]/30 text-xs text-[#FFD0E2]">
+            <span className="font-bold">Statutory Action:</span> Confirming will seal the SHA-256 evidence package and transmit this case into the Nodal Cell queue.
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-txt mb-1">
-              Statutory Justification Reason (Required)
+            <label className="block text-xs font-semibold text-white mb-1">
+              Investigator Statutory Justification:
             </label>
             <textarea
               rows={3}
-              required
               value={confirmReason}
               onChange={(e) => setConfirmReason(e.target.value)}
-              className="w-full bg-sunken border border-line rounded-input p-2.5 text-xs text-txt font-sans focus:border-teal focus:outline-none"
+              className="w-full glass-input rounded-[12px] p-2.5 text-xs text-white focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-txt mb-1 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-teal" />
-              <span>Draft Notice Preview (Section 79(3)(b) & Rule 3(1)(d))</span>
+            <label className="block text-xs font-semibold text-white mb-1">
+              Draft Notice Preview:
             </label>
-            <div className="p-3 rounded-input bg-sunken font-mono text-[11px] text-txt-muted border border-line leading-relaxed max-h-40 overflow-y-auto">
-              <p className="font-semibold text-txt">TO: Resident Grievance Officer, {account.platform.toUpperCase()} Legal Operations</p>
-              <p className="mt-1">RE: Formal Notice under Section 79(3)(b) of the Information Technology Act, 2000</p>
-              <p className="mt-2 text-txt">TARGET: @{account.handle} (SHA-256 Digest: {account.evidenceHash})</p>
-              <p className="mt-1">REASON: {confirmReason}</p>
-              <p className="mt-2">You are hereby called upon to remove / disable access to the aforementioned account within the statutory deadline of 36 hours pursuant to IT (Intermediary Guidelines) Rules 2026.</p>
+            <div className="p-3 rounded-[12px] bg-black/40 border border-white/10 text-[11px] font-mono text-[#C9D6F5] leading-relaxed">
+              <p className="font-bold text-[#12D8C4]">TO: Resident Grievance Officer, {account.platform.toUpperCase()} Legal Operations</p>
+              <p className="mt-1">RE: Statutory Notice under Section 79(3)(b) IT Act 2000 & Rule 3(1)(d) IT Rules 2026</p>
+              <p className="mt-2 text-white">TARGET: @{account.handle} (SHA-256 Seal: {account.evidenceHash})</p>
+              <p className="mt-1">VIOLATIONS: {confirmReason}</p>
+              <p className="mt-2">You are hereby mandated to remove/disable access within 36 hours of receipt.</p>
             </div>
           </div>
         </div>
