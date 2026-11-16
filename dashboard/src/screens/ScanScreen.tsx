@@ -38,7 +38,7 @@ const PLATFORM_CONFIGS: PlatformConfig[] = [
     name: 'Instagram',
     tagline: 'Playwright DOM & DP CDN Scraper',
     placeholder: 'Enter Instagram username (e.g. cristiano, nasa, itbp_official)...',
-    icon: '📸',
+    icon: '/icons/instagram.png',
     accentColor: '#FF3D8B',
     borderColor: 'border-[#FF3D8B]/40',
     presets: ['cristiano', 'nasa', 'itbp_official'],
@@ -49,7 +49,7 @@ const PLATFORM_CONFIGS: PlatformConfig[] = [
     name: 'X (Twitter)',
     tagline: 'Nitter & Direct DOM Extraction',
     placeholder: 'Enter X/Twitter handle (e.g. adgpi, narendramodi)...',
-    icon: '𝕏',
+    icon: '/icons/x.png',
     accentColor: '#12D8C4',
     borderColor: 'border-[#12D8C4]/40',
     presets: ['adgpi', 'narendramodi', 'elonmusk'],
@@ -60,7 +60,7 @@ const PLATFORM_CONFIGS: PlatformConfig[] = [
     name: 'Telegram',
     tagline: 'Zero-Auth Channel & Group DOM Telemetry',
     placeholder: 'Enter Telegram channel handle or t.me URL (e.g. durov)...',
-    icon: '✈️',
+    icon: '/icons/telegram.png',
     accentColor: '#50FFE6',
     borderColor: 'border-[#50FFE6]/40',
     presets: ['durov', 'itbp_channel'],
@@ -71,7 +71,7 @@ const PLATFORM_CONFIGS: PlatformConfig[] = [
     name: 'Facebook',
     tagline: 'Page Authority & Transparency Audit',
     placeholder: 'Enter Facebook page name, handle, or full URL...',
-    icon: '📘',
+    icon: '/icons/facebook.png',
     accentColor: '#7A4DFF',
     borderColor: 'border-[#7A4DFF]/40',
     presets: ['itbpolice', 'indianarmy.adgpi'],
@@ -82,7 +82,7 @@ const PLATFORM_CONFIGS: PlatformConfig[] = [
     name: 'YouTube',
     tagline: 'Channel Metadata & Video Telemetry',
     placeholder: 'Enter YouTube @channel handle or video link...',
-    icon: '▶️',
+    icon: '/icons/youtube.png',
     accentColor: '#FF5C7C',
     borderColor: 'border-[#FF5C7C]/40',
     presets: ['@itbpofficial', '@PIBFactCheck'],
@@ -93,7 +93,7 @@ const PLATFORM_CONFIGS: PlatformConfig[] = [
     name: 'GitHub',
     tagline: 'Public Developer API Telemetry',
     placeholder: 'Enter GitHub username (e.g. torvalds)...',
-    icon: '🐙',
+    icon: '/icons/github.png',
     accentColor: '#3DDC97',
     borderColor: 'border-[#3DDC97]/40',
     presets: ['torvalds'],
@@ -183,7 +183,7 @@ export const ScanScreen: React.FC = () => {
               )}
             >
               <div className="flex items-center justify-between">
-                <span className="text-2xl">{p.icon}</span>
+                <img src={p.icon} alt={p.name} className="w-7 h-7 rounded-full object-cover shrink-0 shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
                 {isSelected && (
                   <span className="w-2 h-2 rounded-full bg-[#12D8C4] shadow-[0_0_8px_#12D8C4] animate-ping" />
                 )}
@@ -246,7 +246,7 @@ export const ScanScreen: React.FC = () => {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-white font-mono flex items-center gap-2">
-                  <span>{activePlatform.icon}</span>
+                  <img src={activePlatform.icon} alt={activePlatform.name} className="w-4 h-4 rounded-full object-cover shrink-0" />
                   <span>{activePlatform.name} Target Handle or URL</span>
                 </label>
                 <span className="text-[10px] font-mono text-[#12D8C4] font-semibold">

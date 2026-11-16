@@ -25,6 +25,10 @@ env/
 app/models/model_registry/*.pkl
 app/models/model_registry/*.joblib
 
+# Vercel
+.vercel
+*.vercel
+
 # Node/React
 dashboard/node_modules/
 dashboard/build/

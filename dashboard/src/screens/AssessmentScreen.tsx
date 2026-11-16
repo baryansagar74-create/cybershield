@@ -31,12 +31,12 @@ interface PlatformTab {
 }
 
 const PLATFORM_TABS: PlatformTab[] = [
-  { id: 'instagram', name: 'Instagram', icon: '📸', placeholder: 'Enter Instagram handle (e.g. cristiano, nasa)...', tagline: 'Live DOM & Avatar Scraper' },
-  { id: 'x', name: 'X / Twitter', icon: '𝕏', placeholder: 'Enter X handle (e.g. adgpi, narendramodi)...', tagline: 'Tweet & Follower Ratio Check' },
-  { id: 'telegram', name: 'Telegram', icon: '✈️', placeholder: 'Enter Telegram channel handle (e.g. durov)...', tagline: 'Zero-Auth Channel Audit' },
-  { id: 'facebook', name: 'Facebook', icon: '📘', placeholder: 'Enter Facebook page / user link...', tagline: 'Page Authority & Impersonation' },
-  { id: 'youtube', name: 'YouTube', icon: '▶️', placeholder: 'Enter YouTube channel handle...', tagline: 'Subscriber Tier & Video Audit' },
-  { id: 'github', name: 'GitHub', icon: '🐙', placeholder: 'Enter GitHub username (e.g. torvalds)...', tagline: 'Developer API Telemetry' },
+  { id: 'instagram', name: 'Instagram', icon: '/icons/instagram.png', placeholder: 'Enter Instagram handle (e.g. cristiano, nasa)...', tagline: 'Live DOM & Avatar Scraper' },
+  { id: 'x', name: 'X / Twitter', icon: '/icons/x.png', placeholder: 'Enter X handle (e.g. adgpi, narendramodi)...', tagline: 'Tweet & Follower Ratio Check' },
+  { id: 'telegram', name: 'Telegram', icon: '/icons/telegram.png', placeholder: 'Enter Telegram channel handle (e.g. durov)...', tagline: 'Zero-Auth Channel Audit' },
+  { id: 'facebook', name: 'Facebook', icon: '/icons/facebook.png', placeholder: 'Enter Facebook page / user link...', tagline: 'Page Authority & Impersonation' },
+  { id: 'youtube', name: 'YouTube', icon: '/icons/youtube.png', placeholder: 'Enter YouTube channel handle...', tagline: 'Subscriber Tier & Video Audit' },
+  { id: 'github', name: 'GitHub', icon: '/icons/github.png', placeholder: 'Enter GitHub username (e.g. torvalds)...', tagline: 'Developer API Telemetry' },
 ];
 
 export const AssessmentScreen: React.FC = () => {
@@ -137,7 +137,7 @@ export const AssessmentScreen: React.FC = () => {
                     : "bg-white/5 text-[#A9B9E0] hover:text-white border-white/10 hover:bg-white/10"
                 )}
               >
-                <span>{tab.icon}</span>
+                <img src={tab.icon} alt={tab.name} className="w-4 h-4 rounded-full object-cover shrink-0" />
                 <span>{tab.name}</span>
               </button>
             );
@@ -257,7 +257,7 @@ export const AssessmentScreen: React.FC = () => {
                 className="p-4 rounded-[18px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#12D8C4]/50 transition-all cursor-pointer text-left space-y-2 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl">{tab.icon}</span>
+                  <img src={tab.icon} alt={tab.name} className="w-8 h-8 rounded-full object-cover shrink-0 shadow-[0_0_12px_rgba(255,255,255,0.25)]" />
                   <span className="text-[10px] font-mono text-[#12D8C4] opacity-0 group-hover:opacity-100 transition-opacity">Select →</span>
                 </div>
                 <div>

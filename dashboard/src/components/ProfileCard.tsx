@@ -91,7 +91,12 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ account, onDownloadPdf
         <div className="flex items-center gap-2">
           {/* Platform Tag */}
           <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white/10 text-white border border-white/20 flex items-center gap-1.5">
-            <Globe className="w-3.5 h-3.5 text-[#12D8C4]" />
+            <img 
+              src={`/icons/${account.platform}.png`} 
+              alt={account.platform} 
+              onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+              className="w-3.5 h-3.5 rounded-full object-cover shrink-0" 
+            />
             <span>{account.platform}</span>
           </span>
 

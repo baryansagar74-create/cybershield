@@ -6,6 +6,7 @@
 ### Automated Fake Social Media Account Detection, Forensic Auditing & Takedown Framework
 **Indo-Tibetan Border Police (ITBP) • Ministry of Home Affairs (MHA) — Cyber Security Hackathon**
 
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20Production%20Workstation-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://dashboard-rho-peach-64.vercel.app)
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React 18](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
@@ -15,7 +16,9 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Test Suite](https://img.shields.io/badge/Pytest-43%2F43%20Passing%20(100%25)-4EBA6F?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
-[Live Analyst Workstation (Port 5173)](http://localhost:5173/) • [Backend API (Port 8000)](http://localhost:8000/) • [Interactive Swagger Docs](http://localhost:8000/docs) • [Chrome Extension](extension/)
+### 🚀 **Live Production Deployment**: [https://dashboard-rho-peach-64.vercel.app](https://dashboard-rho-peach-64.vercel.app)
+
+[🚀 Live Workstation (Vercel)](https://dashboard-rho-peach-64.vercel.app) • [Local Workstation (Port 5173)](http://localhost:5173/) • [Backend API (Port 8000)](http://localhost:8000/) • [Interactive Swagger Docs](http://localhost:8000/docs) • [Chrome Extension](extension/)
 
 ---
 
@@ -229,6 +232,16 @@ npm run dev
 ```
 
 Frontend workstation will be accessible at: `http://localhost:5173`.
+
+### 3. Vercel Cloud Production Deployment
+
+The workstation is live and deployed on Vercel:
+- **Production URL**: [https://dashboard-rho-peach-64.vercel.app](https://dashboard-rho-peach-64.vercel.app)
+- **Deployment Command**:
+```bash
+cd cybershield/dashboard
+vercel --prod --yes
+```
 
 ---
 
