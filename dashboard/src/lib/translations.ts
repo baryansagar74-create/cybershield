@@ -32,7 +32,7 @@ export const translations = {
     scan: {
       title: "Profile Assessment Ingestion",
       subtitle: "Enter public handle or drop evidentiary screenshot",
-      inputPlaceholder: "Enter handle or URL (e.g. @officer_rajesh_8841)",
+      inputPlaceholder: "Enter handle or URL (e.g. @cristiano, @durov)",
       dropzoneText: "Drop profile screenshot or click to browse",
       runScanBtn: "Start multi-signal scan",
       pipelineTitle: "Evaluation pipeline progress"
@@ -79,7 +79,7 @@ export const translations = {
     scan: {
       title: "प्रोफ़ाइल मूल्यांकन अंतर्ग्रहण",
       subtitle: "सार्वजनिक हैंडल दर्ज करें या स्क्रीनशॉट अपलोड करें",
-      inputPlaceholder: "हैंडल या लिंक दर्ज करें (उदा. @officer_rajesh_8841)",
+      inputPlaceholder: "हैंडल या लिंक दर्ज करें (उदा. @cristiano, @durov)",
       dropzoneText: "स्क्रीनशॉट यहाँ खींचें या ब्राउज़ करें",
       runScanBtn: "मल्टी-सिग्नल स्कैन शुरू करें",
       pipelineTitle: "मूल्यांकन पाइपलाइन प्रगति"

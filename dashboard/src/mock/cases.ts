@@ -39,15 +39,15 @@ export const mockCases: TakedownCase[] = [
   {
     id: "case-001",
     caseRef: "ITBP-PG-2026-0841",
-    targetHandle: "@officer_rajesh_8841",
-    targetName: "Rajesh Kumar (ITBP Officer)",
+    targetHandle: "@tactical_guard_ops",
+    targetName: "Border Security Wing Ops",
     platform: "instagram",
     riskScore: 0.84,
     status: "with_nodal_cell",
     statutoryBasis: "Section 79(3)(b) Information Technology Act",
     slaDueMinutes: 145,
     createdAt: "2026-11-16 02:10 UTC",
-    assignedAnalyst: "Insp. Rajesh Kumar (NC-104)",
+    assignedAnalyst: "Cyber Analyst (Active Session)",
     evidenceSummary: {
       followers: 1420,
       following: 3890,
@@ -57,15 +57,15 @@ export const mockCases: TakedownCase[] = [
       safeBrowsingStatus: "MALWARE & PHISHING CONFIRMED"
     },
     timeline: [
-      { time: "02:04 UTC", title: "Evidence Ingested", actor: "Extension Capture", detail: "DOM telemetry and screenshot captured by officer." },
+      { time: "02:04 UTC", title: "Evidence Ingested", actor: "Extension Capture", detail: "DOM telemetry and screenshot captured by analyst." },
       { time: "02:05 UTC", title: "Multi-Signal ML Classification", actor: "RF Model Engine", detail: "Assessed as HIGH RISK (0.84)." },
-      { time: "02:10 UTC", title: "Confirmed by Analyst", actor: "Insp. Rajesh Kumar", detail: "Case drafted and forwarded to Nodal Cell." }
+      { time: "02:10 UTC", title: "Confirmed by Analyst", actor: "Cyber Analyst", detail: "Case drafted and forwarded to Nodal Cell." }
     ],
     noticeDraft: {
       addressedTo: "Grievance Officer, Meta Platforms Inc.",
       section: "Section 79(3)(b) IT Act & Rule 3(1)(d) IT Rules 2026",
       deadlineHours: 36,
-      body: "Pursuant to Section 79(3)(b) of the Information Technology Act 2000, you are hereby notified of the unlawful activity being conducted via account @officer_rajesh_8841. Immediate removal is requested within statutory timelines."
+      body: "Pursuant to Section 79(3)(b) of the Information Technology Act 2000, you are hereby notified of the unlawful activity being conducted via account @tactical_guard_ops. Immediate removal is requested within statutory timelines."
     }
   },
   {
@@ -110,7 +110,7 @@ export const mockCases: TakedownCase[] = [
     statutoryBasis: "Rule 3(2) General Grievance",
     slaDueMinutes: 890,
     createdAt: "2026-11-16 03:40 UTC",
-    assignedAnalyst: "Insp. Rajesh Kumar",
+    assignedAnalyst: "Cyber Analyst (Active Session)",
     evidenceSummary: {
       followers: 4320,
       following: 1120,
@@ -172,7 +172,7 @@ export const mockCases: TakedownCase[] = [
     statutoryBasis: "Section 79(3)(b) & Section 66D IT Act",
     slaDueMinutes: 0,
     createdAt: "2026-11-15 10:12 UTC",
-    assignedAnalyst: "Insp. Rajesh Kumar",
+    assignedAnalyst: "Cyber Analyst (Active Session)",
     evidenceSummary: {
       followers: 12,
       following: 3400,

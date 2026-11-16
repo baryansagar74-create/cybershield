@@ -23,8 +23,8 @@ export const mockAuditLogs: AuditEntry[] = [
     id: "log-002",
     timestamp: "2026-11-16 02:04:10 UTC",
     action: "PROFILE_INGESTED",
-    actor: "Insp. Rajesh Kumar (ITBP-NC-104)",
-    targetHandle: "@officer_rajesh_8841",
+    actor: "Cyber Analyst (Active Session)",
+    targetHandle: "@tactical_guard_ops",
     prevHash: "a7f3e829b41c09d5e38192a6c08e5f14e912bc48d901a238e9102c48d910283a",
     thisHash: "c4b901e8a27d5f69c3821049b71e8a9fd8201a4e92b81029c48192a01928471b"
   },
@@ -33,7 +33,7 @@ export const mockAuditLogs: AuditEntry[] = [
     timestamp: "2026-11-16 02:05:45 UTC",
     action: "RISK_EVALUATED_HIGH",
     actor: "ML_ENGINE_RF_V1",
-    targetHandle: "@officer_rajesh_8841",
+    targetHandle: "@tactical_guard_ops",
     prevHash: "c4b901e8a27d5f69c3821049b71e8a9fd8201a4e92b81029c48192a01928471b",
     thisHash: "e58129a0c4f83d719e20516b83f0927c89102938a1928374b91029384719283c"
   },
@@ -50,7 +50,7 @@ export const mockAuditLogs: AuditEntry[] = [
     id: "log-005",
     timestamp: "2026-11-16 03:10:02 UTC",
     action: "TAKEDOWN_DOCKET_CREATED",
-    actor: "Insp. Rajesh Kumar (ITBP-NC-104)",
+    actor: "Cyber Analyst (Active Session)",
     targetHandle: "@itbp_recruit_2024",
     prevHash: "8b72e01a93c4d5f78219460e5b82c19a901928374b1928374c8192039481920d",
     thisHash: "1948ba5c902e4f71a8e29304b81c95e0819203948b1928374c8192039481920e"
@@ -60,7 +60,7 @@ export const mockAuditLogs: AuditEntry[] = [
     timestamp: "2026-11-16 03:32:15 UTC",
     action: "NOTICE_SECTION_79_GENERATED",
     actor: "Nodal Cell Officer (MHA-I4C-99)",
-    targetHandle: "@officer_rajesh_8841",
+    targetHandle: "@tactical_guard_ops",
     prevHash: "1948ba5c902e4f71a8e29304b81c95e0819203948b1928374c8192039481920e",
     thisHash: "6f901a8e3b5c4d72819204e7b81c95a2819203948b1928374c8192039481920f"
   },

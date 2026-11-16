@@ -6,7 +6,7 @@ import { Shield, KeyRound, Lock, UserCheck, Sparkles } from 'lucide-react';
 export const SignInScreen: React.FC = () => {
   const { login } = useApp();
   const [step, setStep] = useState<1 | 2>(1);
-  const [officerId, setOfficerId] = useState<string>("ITBP-NC-104");
+  const [officerId, setOfficerId] = useState<string>("Cyber Analyst");
   const [password, setPassword] = useState<string>("••••••••••••");
   const [twoFactorCode, setTwoFactorCode] = useState<string>("729401");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -62,7 +62,7 @@ export const SignInScreen: React.FC = () => {
                   required
                   value={officerId}
                   onChange={(e) => setOfficerId(e.target.value)}
-                  placeholder="e.g. ITBP-NC-104"
+                  placeholder="e.g. Cyber Analyst"
                   className="w-full glass-input rounded-[14px] px-3.5 py-2.5 text-sm text-white font-mono focus:border-[#12D8C4] focus:outline-none"
                 />
                 <UserCheck className="w-4 h-4 text-[#12D8C4] absolute right-3.5 top-3" />

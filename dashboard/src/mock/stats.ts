@@ -44,7 +44,7 @@ export const mockNearestSla: SlaDeadlineItem[] = [
   {
     id: "sla-2",
     caseRef: "ITBP-PG-2026-0841",
-    handle: "@officer_rajesh_8841",
+    handle: "@tactical_guard_ops",
     platform: "Instagram",
     type: "Urgent Complaint (Sec 79(3)(b))",
     remainingMinutes: 145, // Under 3h -> Saffron

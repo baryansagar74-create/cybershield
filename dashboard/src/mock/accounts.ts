@@ -49,8 +49,8 @@ export const mockAccounts: MockAccount[] = [
   // Required Seed 1
   {
     id: "acc-001",
-    handle: "officer_rajesh_8841",
-    name: "Rajesh Kumar (ITBP Officer)",
+    handle: "tactical_guard_ops",
+    name: "Border Security Wing Ops",
     platform: "instagram",
     score: 0.84,
     band: "HIGH",
